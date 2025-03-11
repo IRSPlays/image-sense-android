@@ -32,18 +32,18 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
   }, [onComplete]);
   
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-primary/10 to-background z-50">
       <div className="text-center space-y-6">
-        <div className="mb-6 p-4 rounded-full bg-primary/10">
-          <Fish size={48} className="text-primary animate-pulse" />
+        <div className="mb-8 p-5 rounded-full bg-primary/10 shadow-lg shadow-primary/20">
+          <Fish size={64} className="text-primary animate-pulse" />
         </div>
         
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-fishify tracking-wide">
+        <h1 className="text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-fishify tracking-wider mb-2 animate-fade-in">
           FISHIFY
         </h1>
         
-        <div className="w-64 mx-auto">
-          <Progress value={progress} className="h-2" />
+        <div className="w-72 mx-auto">
+          <Progress value={progress} className="h-3" />
         </div>
         
         <p className="text-sm text-muted-foreground animate-pulse">
