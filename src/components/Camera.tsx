@@ -1,9 +1,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { loadModel, predictImage, isModelReady, Prediction } from '@/services/modelService';
-import { RefreshCw, Camera as CameraIcon, FlipCameraIcon } from 'lucide-react';
+import { RefreshCw, Camera as CameraIcon } from 'lucide-react';
 
 interface CameraComponentProps {
   onPredictionsUpdate: (predictions: Prediction[]) => void;
@@ -89,12 +89,13 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   const takePictureWithCapacitor = async () => {
     try {
       setIsLoading(true);
-      const image = await Camera.getPhoto({
+      const image = await CapacitorCamera.getPhoto({
         quality: 90,
         allowEditing: false,
         resultType: CameraResultType.Uri,
+        // Fix the CameraSource usage
         source: CameraSource.Camera,
-        direction: isFrontCamera ? CameraSource.Front : CameraSource.Rear
+        direction: isFrontCamera ? 1 : 0  // 1 for front, 0 for rear
       });
       
       // Load the captured image to an HTML element
@@ -205,7 +206,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
           className="rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white"
           onClick={toggleCamera}
         >
-          <FlipCameraIcon className="h-5 w-5" />
+          <CameraIcon className="h-5 w-5" />
         </Button>
         
         <Button 

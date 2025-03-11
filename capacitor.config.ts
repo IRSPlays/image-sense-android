@@ -11,8 +11,11 @@ const config: CapacitorConfig = {
   },
   plugins: {
     Camera: {
-      permissions: true
+      permissions: ['android.permission.CAMERA']
     }
+  },
+  android: {
+    backgroundColor: "#121212"
   }
 };
 
