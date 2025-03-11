@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Fish, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 
 // Updated comprehensive fish data
