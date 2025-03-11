@@ -18,7 +18,7 @@ const CameraPage = () => {
     <div className="min-h-screen bg-background pb-16">
       <header className="py-6 px-4 border-b">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Fish Scanner</h1>
+          <h1 className="text-2xl font-bold">Fishify Scanner</h1>
           <ThemeToggle />
         </div>
       </header>

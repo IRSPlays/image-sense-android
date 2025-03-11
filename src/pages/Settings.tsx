@@ -2,12 +2,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera, Github, Info, Mail } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Settings = () => {
   return (
     <div className="min-h-screen bg-background pb-16">
       <header className="py-6 px-4 border-b">
-        <h1 className="text-2xl font-bold text-center">Settings</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Settings</h1>
+          <ThemeToggle />
+        </div>
       </header>
       
       <main className="container max-w-md mx-auto py-6 px-4">
@@ -63,7 +67,7 @@ const Settings = () => {
           
           <div className="text-center text-sm text-muted-foreground mt-8">
             <p>Powered by Teachable Machine</p>
-            <p className="mt-1">© 2023 Image Sense App</p>
+            <p className="mt-1">© 2023 Fishify App</p>
           </div>
         </div>
       </main>

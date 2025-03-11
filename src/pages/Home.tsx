@@ -2,15 +2,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Fish, Camera as CameraIcon } from 'lucide-react';
+import { Fish, Camera as CameraIcon, Smartphone, Info } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-background pb-16">
       <header className="py-6 px-4 border-b">
-        <h1 className="text-2xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Image Sense
-        </h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Fishify
+          </h1>
+          <ThemeToggle />
+        </div>
       </header>
       
       <main className="container max-w-md mx-auto py-6 px-4">
@@ -21,7 +25,7 @@ const Home = () => {
             </div>
             <h2 className="text-xl font-semibold">Fish Recognition</h2>
             <p className="text-muted-foreground">
-              Identify fish species using your camera or photo library.
+              Point your camera at any fish to identify it instantly using AI-powered recognition.
             </p>
             <Button asChild className="mt-4">
               <Link to="/camera">
@@ -37,7 +41,7 @@ const Home = () => {
             </div>
             <h2 className="text-xl font-semibold">Fish Database</h2>
             <p className="text-muted-foreground">
-              Browse our comprehensive database of fish species.
+              Browse our comprehensive database of fish species with detailed information.
             </p>
             <Button asChild variant="secondary" className="mt-4">
               <Link to="/fish-list">
@@ -45,6 +49,28 @@ const Home = () => {
                 View Fish List
               </Link>
             </Button>
+          </div>
+          
+          <div className="rounded-lg bg-card border border-border p-6 space-y-4">
+            <div className="flex items-start">
+              <Smartphone className="h-6 w-6 text-primary mr-3 flex-shrink-0 mt-0.5" />
+              <div className="text-left">
+                <h3 className="font-medium">Android Features</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Use your device's camera for real-time fish identification. Works offline once models are loaded.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <Info className="h-6 w-6 text-primary mr-3 flex-shrink-0 mt-0.5" />
+              <div className="text-left">
+                <h3 className="font-medium">Getting Started</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Navigate using the bottom tabs. For best results, hold your camera 30-60cm from the fish in good lighting.
+                </p>
+              </div>
+            </div>
           </div>
           
           <div className="text-center text-sm text-muted-foreground mt-8">
