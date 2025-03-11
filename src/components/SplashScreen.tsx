@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Progress } from '@/components/ui/progress';
-import { CameraIcon } from 'lucide-react';
+import { Fish } from 'lucide-react';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -35,11 +35,11 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50">
       <div className="text-center space-y-6">
         <div className="mb-6 p-4 rounded-full bg-primary/10">
-          <CameraIcon size={48} className="text-primary animate-pulse" />
+          <Fish size={48} className="text-primary animate-pulse" />
         </div>
         
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Image Sense
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-fishify tracking-wide">
+          FISHIFY
         </h1>
         
         <div className="w-64 mx-auto">
@@ -47,7 +47,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
         </div>
         
         <p className="text-sm text-muted-foreground animate-pulse">
-          Loading Teachable Machine model...
+          Loading Fish Recognition Model...
         </p>
       </div>
     </div>

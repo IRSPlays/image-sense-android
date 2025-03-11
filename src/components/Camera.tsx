@@ -1,8 +1,10 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 import { loadModel, predictImage, isModelReady, Prediction } from '@/services/modelService';
 import { RefreshCw, Camera as CameraIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface CameraComponentProps {
   onPredictionsUpdate: (predictions: Prediction[]) => void;
@@ -20,6 +22,34 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   const streamRef = useRef<MediaStream | null>(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const animationRef = useRef<number>();
+  const navigate = useNavigate();
+  
+  // Fish name to ID mapping for redirection
+  const fishNameToId: Record<string, number> = {
+    "Devil Rays": 2,
+    "Giant Guitarfishes": 3,
+    "Great White Shark": 4,
+    "Great Hammerhead Shark": 5,
+    "Smooth Hammerhead Shark": 7,
+    "Scalloped Hammerhead Shark": 8,
+    "Shortfin Mako Shark": 9,
+    "Longfin Mako Shark": 10,
+    "Manta Rays": 11,
+    "Oceanic White-tip Shark": 12,
+    "Porbeagle Shark": 13,
+    "Sawfish": 14,
+    "Seahorses": 15,
+    "Silky Shark": 16,
+    "White Teatfish": 17,
+    "Black Teatfish": 18,
+    "Thresher Sharks": 19,
+    "Wedgefishes": 20,
+    "Whale Shark": 6,
+    "Orange-Spotted Grouper": 21,
+    "Leopard Coral Trout": 22,
+    "Blacktip Reef Shark": 36,
+    "Barramundi": 30
+  };
   
   useEffect(() => {
     const initModel = async () => {
@@ -158,6 +188,19 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       if (canvas) {
         const predictions = await predictImage(canvas);
         onPredictionsUpdate(predictions);
+        
+        // If we have predictions, and the top one has reasonable confidence, navigate to the fish detail page
+        if (predictions.length > 0 && predictions[0].probability > 0.7) {
+          const topPrediction = predictions[0];
+          const fishId = fishNameToId[topPrediction.className];
+          
+          // Give a short delay to show the prediction before navigating
+          setTimeout(() => {
+            if (fishId) {
+              navigate(`/fish/${fishId}`);
+            }
+          }, 1500);
+        }
       }
     } catch (error) {
       console.error('Error predicting:', error);
