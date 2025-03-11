@@ -5,9 +5,13 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import Home from "./pages/Home";
+import FishList from "./pages/FishList";
+import CameraPage from "./pages/CameraPage";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
+import TabNavigation from "./components/TabNavigation";
 
 const queryClient = new QueryClient();
 
@@ -23,10 +27,16 @@ const App = () => {
           <SplashScreen onComplete={() => setShowSplash(false)} />
         ) : (
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <div className="relative">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/fish-list" element={<FishList />} />
+                <Route path="/camera" element={<CameraPage />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <TabNavigation />
+            </div>
           </BrowserRouter>
         )}
       </TooltipProvider>

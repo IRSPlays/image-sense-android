@@ -1,7 +1,6 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 import { loadModel, predictImage, isModelReady, Prediction } from '@/services/modelService';
 import { RefreshCw, Camera as CameraIcon } from 'lucide-react';
 
@@ -55,7 +54,6 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       setCameraReady(false);
       setIsLoading(true);
       
-      // Stop any existing stream
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
@@ -79,7 +77,6 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
-      // Fallback to Capacitor Camera API if browser API fails
       takePictureWithCapacitor();
     } finally {
       setIsLoading(false);
@@ -93,12 +90,10 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         quality: 90,
         allowEditing: false,
         resultType: CameraResultType.Uri,
-        // Fix the CameraSource usage
         source: CameraSource.Camera,
-        direction: isFrontCamera ? 1 : 0  // 1 for front, 0 for rear
+        direction: isFrontCamera ? CameraDirection.Front : CameraDirection.Rear
       });
       
-      // Load the captured image to an HTML element
       if (image.webPath) {
         const img = new Image();
         img.onload = async () => {
@@ -138,7 +133,6 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         
-        // Flip horizontally if using front camera
         if (isFrontCamera) {
           context.translate(canvas.width, 0);
           context.scale(-1, 1);
@@ -146,7 +140,6 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         
-        // Restore transform
         if (isFrontCamera) {
           context.setTransform(1, 0, 0, 1, 0, 0);
         }
