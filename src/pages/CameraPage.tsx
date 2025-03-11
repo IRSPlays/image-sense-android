@@ -4,6 +4,7 @@ import { Prediction } from '@/services/modelService';
 import CameraComponent from '@/components/Camera';
 import PredictionDisplay from '@/components/PredictionDisplay';
 import { Loader2 } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const CameraPage = () => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
@@ -16,7 +17,10 @@ const CameraPage = () => {
   return (
     <div className="min-h-screen bg-background pb-16">
       <header className="py-6 px-4 border-b">
-        <h1 className="text-2xl font-bold text-center">Fish Scanner</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Fish Scanner</h1>
+          <ThemeToggle />
+        </div>
       </header>
       
       <main className="container max-w-md mx-auto py-6 px-4">
