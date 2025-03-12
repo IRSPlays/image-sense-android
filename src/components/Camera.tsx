@@ -194,12 +194,24 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
           const topPrediction = predictions[0];
           const fishId = fishNameToId[topPrediction.className];
           
-          // Give a short delay to show the prediction before navigating
-          setTimeout(() => {
-            if (fishId) {
-              navigate(`/fish/${fishId}`);
+          if (fishId) {
+            // Cancel any pending animation frames before navigating
+            if (animationRef.current) {
+              cancelAnimationFrame(animationRef.current);
             }
-          }, 1500);
+            
+            // Stop camera stream before navigating
+            if (streamRef.current) {
+              streamRef.current.getTracks().forEach(track => track.stop());
+            }
+            
+            // Navigate to the fish detail page after a short delay
+            setTimeout(() => {
+              navigate(`/fish/${fishId}`);
+            }, 1000);
+            
+            return; // Don't request next animation frame
+          }
         }
       }
     } catch (error) {

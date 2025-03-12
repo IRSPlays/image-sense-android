@@ -92,40 +92,42 @@ const FishChat = () => {
               }`}
             >
               <div
-                className={`max-w-[80%] p-3 rounded-lg ${
+                className={`max-w-[80%] p-4 rounded-lg ${
                   msg.isUser
                     ? "bg-primary text-primary-foreground"
-                    : "bg-card border"
+                    : "bg-card border shadow-sm"
                 }`}
               >
-                <div className="flex items-center mb-1">
+                <div className="flex items-center mb-2">
                   {msg.isUser ? (
                     <>
-                      <span className="text-xs font-medium">You</span>
-                      <User className="h-3 w-3 ml-1" />
+                      <span className="text-sm font-medium">You</span>
+                      <User className="h-4 w-4 ml-1" />
                     </>
                   ) : (
                     <>
-                      <span className="text-xs font-medium">Fish Expert</span>
-                      <Bot className="h-3 w-3 ml-1" />
+                      <span className="text-sm font-medium">Fish Expert</span>
+                      <Bot className="h-4 w-4 ml-1" />
                     </>
                   )}
                 </div>
-                <div className="whitespace-pre-wrap text-sm">{msg.content}</div>
+                <div className="whitespace-pre-wrap text-base leading-relaxed">
+                  {msg.content}
+                </div>
               </div>
             </div>
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-lg bg-card border">
-                <div className="flex items-center mb-1">
-                  <span className="text-xs font-medium">Fish Expert</span>
-                  <Bot className="h-3 w-3 ml-1" />
+              <div className="max-w-[80%] p-4 rounded-lg bg-card border shadow-sm">
+                <div className="flex items-center mb-2">
+                  <span className="text-sm font-medium">Fish Expert</span>
+                  <Bot className="h-4 w-4 ml-1" />
                 </div>
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "0ms" }}></div>
-                  <div className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "300ms" }}></div>
-                  <div className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "600ms" }}></div>
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                  <div className="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                  <div className="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style={{ animationDelay: "600ms" }}></div>
                 </div>
               </div>
             </div>
