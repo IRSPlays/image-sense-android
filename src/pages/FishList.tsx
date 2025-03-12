@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Link, useSearchParams } from 'react-router-dom';
 import { fishData } from '@/data/fishData';
+import SearchSuggestions from '@/components/SearchSuggestions';
+import { getSearchSuggestions } from '@/services/geminiService';
+import { useToast } from "@/hooks/use-toast";
 
 const FishList = () => {
   const [searchParams] = useSearchParams();
@@ -13,6 +16,35 @@ const FishList = () => {
   
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [filterStatus, setFilterStatus] = useState('all'); // 'all', 'protected', 'non-protected'
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchTerm.trim().length < 3) {
+        setSuggestions([]);
+        return;
+      }
+      
+      setIsLoadingSuggestions(true);
+      const result = await getSearchSuggestions(searchTerm);
+      setIsLoadingSuggestions(false);
+      
+      if (result.error) {
+        toast({
+          title: "Error loading suggestions",
+          description: result.error,
+          variant: "destructive",
+        });
+      } else {
+        setSuggestions(result.suggestions);
+      }
+    };
+    
+    const timer = setTimeout(fetchSuggestions, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm, toast]);
   
   const filteredFish = fishData.filter(fish => {
     const nameMatch = fish.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -20,6 +52,10 @@ const FishList = () => {
     const statusMatch = filterStatus === 'all' || fish.status === filterStatus;
     return nameMatch && statusMatch;
   });
+  
+  const handleSelectSuggestion = (suggestion: string) => {
+    setSearchTerm(suggestion);
+  };
   
   return (
     <div className="min-h-screen bg-background pb-16">
@@ -38,6 +74,13 @@ const FishList = () => {
             className="pl-10"
           />
           <Search className="absolute left-3 top-2.5 text-muted-foreground h-4 w-4" />
+          
+          {/* AI Suggestions */}
+          <SearchSuggestions 
+            suggestions={suggestions}
+            isLoading={isLoadingSuggestions}
+            onSelectSuggestion={handleSelectSuggestion}
+          />
         </div>
         
         <div className="flex mt-4 space-x-2">

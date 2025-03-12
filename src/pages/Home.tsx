@@ -1,11 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Fish, Camera, Info, Calendar, ExternalLink } from 'lucide-react';
+import { Search, Fish, Camera, Calendar, ExternalLink } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import ThemeToggle from '@/components/ThemeToggle';
+import SearchSuggestions from '@/components/SearchSuggestions';
+import { getSearchSuggestions } from '@/services/geminiService';
+import { useToast } from "@/hooks/use-toast";
 
 const fishNews = [
   {
@@ -33,13 +36,47 @@ const fishNews = [
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchTerm.trim().length < 3) {
+        setSuggestions([]);
+        return;
+      }
+      
+      setIsLoadingSuggestions(true);
+      const result = await getSearchSuggestions(searchTerm);
+      setIsLoadingSuggestions(false);
+      
+      if (result.error) {
+        toast({
+          title: "Error loading suggestions",
+          description: result.error,
+          variant: "destructive",
+        });
+      } else {
+        setSuggestions(result.suggestions);
+      }
+    };
+    
+    const timer = setTimeout(fetchSuggestions, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm, toast]);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/fish-list?search=${encodeURIComponent(searchTerm)}`);
     }
+  };
+  
+  const handleSelectSuggestion = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    navigate(`/fish-list?search=${encodeURIComponent(suggestion)}`);
   };
   
   return (
@@ -56,7 +93,7 @@ const Home = () => {
         <section className="mb-10">
           <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
             <h2 className="text-2xl font-semibold mb-4">Find Your Fish</h2>
-            <form onSubmit={handleSearch} className="space-y-4">
+            <form onSubmit={handleSearch} className="space-y-1">
               <div className="relative">
                 <Input
                   type="search"
@@ -67,7 +104,17 @@ const Home = () => {
                 />
                 <Search className="absolute left-3 top-2.5 text-muted-foreground h-5 w-5" />
               </div>
-              <Button type="submit" className="w-full">Search Fish Database</Button>
+              
+              {/* AI Suggestions */}
+              <SearchSuggestions 
+                suggestions={suggestions}
+                isLoading={isLoadingSuggestions}
+                onSelectSuggestion={handleSelectSuggestion}
+              />
+              
+              <div className="pt-2">
+                <Button type="submit" className="w-full">Search Fish Database</Button>
+              </div>
             </form>
           </div>
         </section>
