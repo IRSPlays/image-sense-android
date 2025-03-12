@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Fish, ArrowLeft, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -39,6 +39,11 @@ const FishDetail = () => {
       setIsLoading(false);
     }
   };
+  
+  // Reset answer when fish changes
+  useEffect(() => {
+    setAnswer('');
+  }, [fishId]);
   
   if (!fish) {
     return (

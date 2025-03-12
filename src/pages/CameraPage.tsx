@@ -8,11 +8,13 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { fishData } from '@/data/fishData';
+import { useToast } from '@/hooks/use-toast';
 
 const CameraPage = () => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handlePredictionsUpdate = (newPredictions: Prediction[]) => {
     setPredictions(newPredictions);
@@ -46,24 +48,43 @@ const CameraPage = () => {
   };
 
   const identifyFish = () => {
-    if (predictions.length === 0) return;
+    if (predictions.length === 0) {
+      toast({
+        title: "No fish detected",
+        description: "Please take a photo or allow the camera to analyze the image first.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     const topPrediction = predictions[0];
-    const fishId = fishNameToId[topPrediction.className];
+    console.log("Top prediction:", topPrediction);
     
-    // If fish is found in our database, navigate to its details
-    if (fishId) {
-      navigate(`/fish/${fishId}`);
-    } else {
-      // Try to find a close match
+    // Check exact match first
+    let fishId = fishNameToId[topPrediction.className];
+    console.log("Found fish ID for exact match:", fishId);
+    
+    // If no exact match, try to find a close match
+    if (!fishId) {
       const matchedFish = fishData.find(fish => 
-        topPrediction.className.includes(fish.name) || 
-        fish.name.includes(topPrediction.className)
+        topPrediction.className.toLowerCase().includes(fish.name.toLowerCase()) || 
+        fish.name.toLowerCase().includes(topPrediction.className.toLowerCase())
       );
       
       if (matchedFish) {
-        navigate(`/fish/${matchedFish.id}`);
+        fishId = matchedFish.id;
+        console.log("Found fish ID for close match:", fishId);
       }
+    }
+    
+    if (fishId) {
+      navigate(`/fish/${fishId}`);
+    } else {
+      toast({
+        title: "Fish not found",
+        description: "We couldn't identify this fish in our database. Try another photo.",
+        variant: "destructive"
+      });
     }
   };
 
