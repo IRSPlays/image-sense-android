@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Map, MapPin, Navigation } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Map, MapPin, Navigation, Fish } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -128,6 +128,19 @@ const FishingMap = () => {
     window.open(`https://www.google.com/maps/search/?api=1&query=${spot.coordinates.lat},${spot.coordinates.lng}`, "_blank");
   };
 
+  // Find fish details for the selected spot
+  const fishDetailsForSpot = useMemo(() => {
+    if (!selectedSpot) return [];
+    
+    return selectedSpot.fishTypes
+      .map(fishName => fishData.find(fish => 
+        fish.name === fishName || 
+        fish.name.includes(fishName) || 
+        fishName.includes(fish.name)
+      ))
+      .filter(Boolean);
+  }, [selectedSpot]);
+
   return (
     <div className="min-h-screen bg-background pb-16">
       <header className="py-6 px-4 border-b sticky top-0 bg-background z-10">
@@ -200,23 +213,11 @@ const FishingMap = () => {
 
         {selectedSpot && (
           <Card className="mt-6 border-t-4 border-t-primary">
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start">
+            <CardContent className="p-6">
+              <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="font-medium text-lg">{selectedSpot.name}</h3>
                   <p className="text-sm mt-1">{selectedSpot.description}</p>
-                  
-                  <h4 className="font-medium text-sm mt-3">Common Fish:</h4>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {selectedSpot.fishTypes.map((fish) => (
-                      <span 
-                        key={fish} 
-                        className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"
-                      >
-                        {fish}
-                      </span>
-                    ))}
-                  </div>
                 </div>
                 
                 <Button
@@ -226,6 +227,59 @@ const FishingMap = () => {
                   <Navigation className="h-4 w-4 mr-1" />
                   Directions
                 </Button>
+              </div>
+              
+              <h4 className="font-medium text-sm mb-2">Fish Species Available:</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                {selectedSpot.fishTypes.map((fishName) => {
+                  const fishInfo = fishData.find(f => 
+                    f.name === fishName || 
+                    f.name.includes(fishName) || 
+                    fishName.includes(f.name)
+                  );
+                  
+                  return (
+                    <Card key={fishName} className="overflow-hidden">
+                      <div className="flex">
+                        {fishInfo && (
+                          <div className="w-16 h-16 bg-muted flex-shrink-0">
+                            {fishInfo.imageUrl && (
+                              <img 
+                                src={fishInfo.imageUrl} 
+                                alt={fishInfo.name} 
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                        )}
+                        <CardContent className="p-3">
+                          <div className="flex items-start gap-1">
+                            <Fish className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                            <div>
+                              <p className="font-medium text-sm">{fishName}</p>
+                              {fishInfo && (
+                                <>
+                                  <p className="text-xs text-muted-foreground italic">
+                                    {fishInfo.scientificName}
+                                  </p>
+                                  <div className="mt-1">
+                                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                                      fishInfo.status === 'protected' 
+                                        ? 'bg-destructive/10 text-destructive' 
+                                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                                    }`}>
+                                      {fishInfo.status === 'protected' ? 'Protected Species' : 'Non-Protected'}
+                                    </span>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
