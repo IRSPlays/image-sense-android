@@ -16,20 +16,17 @@ export default defineConfig(({ mode }) => ({
       babel: {
         plugins: ["@emotion/babel-plugin"],
       },
-      plugins: [
-        {
-          name: "inject-gpt-engineer-script",
-          transformIndexHtml(html: string) {
-            return html.replace(
-              /<head>([\s\S]*?)<\/head>/,
-              `<head>$1<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></head>`
-            );
-          },
-        },
-      ],
     }),
-    mode === 'development' &&
-    componentTagger(),
+    {
+      name: 'inject-gpt-engineer-script',
+      transformIndexHtml(html: string) {
+        return html.replace(
+          /<head>([\s\S]*?)<\/head>/,
+          `<head>$1<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></head>`
+        );
+      },
+    },
+    mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
