@@ -1,6 +1,8 @@
 
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+
 const API_KEY = "AIzaSyDyzWlsUqTC0JLu7GmaSHe_kFWpUFb1OY8";
-const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 export interface GeminiResponse {
   suggestions: string[];
@@ -13,39 +15,27 @@ export const getSearchSuggestions = async (query: string): Promise<GeminiRespons
   }
 
   try {
-    const response = await fetch(`${API_URL}?key=${API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    // Get the generative model
+    const model = genAI.getGenerativeModel({
+      model: "gemini-pro",
+      generationConfig: {
+        temperature: 0.2,
+        maxOutputTokens: 150,
+        topP: 0.95,
+        topK: 40,
       },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: `Based on this search query about fish: "${query}", 
-                suggest 5 related fish species or search terms that would be relevant. 
-                Return only the suggestions as a JSON array of strings, no explanations.`
-              }
-            ]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 150,
-        }
-      })
     });
 
-    const data = await response.json();
-    
-    if (data.error) {
-      console.error("Gemini API error:", data.error);
-      return { suggestions: [], error: data.error.message };
-    }
+    // Create the prompt for fish-related suggestions
+    const prompt = `Based on this search query about fish: "${query}", 
+      suggest 5 related fish species or search terms that would be relevant. 
+      Return only the suggestions as a JSON array of strings, no explanations.`;
 
-    // Parse the response to extract the suggestions array
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    // Generate content
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
     if (!text) {
       return { suggestions: [] };
     }
@@ -70,6 +60,45 @@ export const getSearchSuggestions = async (query: string): Promise<GeminiRespons
     }
   } catch (error) {
     console.error("Error calling Gemini API:", error);
-    return { suggestions: [], error: "Network error" };
+    return { 
+      suggestions: [], 
+      error: error instanceof Error ? error.message : "Unknown error occurred" 
+    };
+  }
+};
+
+// Function to have a chat conversation about fish
+export const chatWithFishExpert = async (message: string): Promise<string> => {
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-pro",
+      generationConfig: {
+        temperature: 1,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 1000,
+      },
+    });
+
+    // Start a chat session with a fish expert context
+    const chatSession = model.startChat({
+      history: [
+        {
+          role: "user",
+          parts: [{ text: "You are a fish specialist who can explain about fish and anything related to fish. You are familiar with fish species around the world." }],
+        },
+        {
+          role: "model",
+          parts: [{ text: "I'd be happy to serve as your fish specialist! I have extensive knowledge about fish species, marine biology, aquatic ecosystems, and fishing practices from around the world. Feel free to ask me anything about freshwater or saltwater fish, aquarium care, conservation, or any other fish-related topics. How can I help you today?" }],
+        },
+      ],
+    });
+
+    // Send the user's message to the chat
+    const result = await chatSession.sendMessage(message);
+    return result.response.text();
+  } catch (error) {
+    console.error("Error in fish expert chat:", error);
+    return "Sorry, I couldn't connect to the fish expert at the moment. Please try again later.";
   }
 };
