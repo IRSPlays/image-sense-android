@@ -17,7 +17,7 @@ export const getSearchSuggestions = async (query: string): Promise<GeminiRespons
   try {
     // Get the generative model
     const model = genAI.getGenerativeModel({
-      model: "gemini-pro",
+      model: "gemini-2.0-flash",
       generationConfig: {
         temperature: 0.2,
         maxOutputTokens: 150,
@@ -71,7 +71,7 @@ export const getSearchSuggestions = async (query: string): Promise<GeminiRespons
 export const chatWithFishExpert = async (message: string): Promise<string> => {
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-pro",
+      model: "gemini-2.0-flash",
       generationConfig: {
         temperature: 1,
         topP: 0.95,
