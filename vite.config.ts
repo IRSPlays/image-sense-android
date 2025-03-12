@@ -12,10 +12,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      jsxImportSource: "@emotion/react",
-      babel: {
-        plugins: ["@emotion/babel-plugin"],
-      },
+      jsxImportSource: undefined, // Remove emotion configuration
+      plugins: [], // Provide empty plugins array instead of babel config
     }),
     {
       name: 'inject-gpt-engineer-script',
