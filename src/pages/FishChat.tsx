@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { chatWithFishExpert } from '@/services/geminiService';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ChatMessage {
   id: string;
@@ -25,6 +26,8 @@ const FishChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -34,24 +37,34 @@ const FishChat = () => {
     scrollToBottom();
   }, [chatHistory]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim() || isLoading) return;
+  // Handle incoming question from URL parameter
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const question = searchParams.get('question');
+    
+    if (question && chatHistory.length === 1) {
+      handleAskQuestion(question);
+      // Clear the URL parameter after processing
+      navigate('/fish-chat', { replace: true });
+    }
+  }, [location.search]);
+
+  const handleAskQuestion = async (questionText: string) => {
+    if (!questionText.trim() || isLoading) return;
 
     // Add user message to chat
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
-      content: message,
+      content: questionText,
       isUser: true,
     };
     
     setChatHistory((prev) => [...prev, userMessage]);
     setIsLoading(true);
-    setMessage('');
 
     try {
       // Get response from AI
-      const response = await chatWithFishExpert(message);
+      const response = await chatWithFishExpert(questionText);
       
       // Add AI response to chat
       const aiMessage: ChatMessage = {
@@ -71,6 +84,14 @@ const FishChat = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim() || isLoading) return;
+
+    await handleAskQuestion(message);
+    setMessage('');
   };
 
   return (

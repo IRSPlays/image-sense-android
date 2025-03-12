@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Fish, Camera, Calendar, ExternalLink, MessageCircle } from 'lucide-react';
+import { Search, Fish, Camera, Calendar, ExternalLink, MessageCircle, Anchor, Award, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,24 +13,24 @@ import { useToast } from "@/hooks/use-toast";
 const fishNews = [
   {
     id: 1,
-    title: "New Protected Marine Areas Established in Singapore Waters",
-    date: "June 15, 2023",
-    summary: "Singapore's National Parks Board announced new marine protected areas around the Southern Islands to safeguard coral reefs and marine biodiversity.",
-    link: "https://www.nparks.gov.sg/",
+    title: "Scientists Discover New Deep-Sea Fish Species in the Mariana Trench",
+    date: "August 23, 2023",
+    summary: "Marine biologists have identified five previously unknown fish species during a recent expedition to the Mariana Trench, highlighting the vast biodiversity still to be discovered in our oceans.",
+    link: "https://www.nationalgeographic.com/",
   },
   {
     id: 2,
-    title: "Rare Whale Shark Spotted Off Singapore's East Coast",
-    date: "May 3, 2023",
-    summary: "Marine enthusiasts spotted a juvenile whale shark near Changi, highlighting the importance of Singapore's waters as a habitat for endangered species.",
-    link: "https://www.wildsingapore.com/",
+    title: "Global Effort Launched to Protect Endangered Coral Reef Fish",
+    date: "July 14, 2023",
+    summary: "A coalition of 27 countries has committed to new conservation measures aimed at protecting critically endangered coral reef fish species from overfishing and habitat destruction.",
+    link: "https://www.conservation.org/",
   },
   {
     id: 3,
-    title: "Singapore Strengthens Regulations Against Illegal Fish Trading",
-    date: "April 22, 2023",
-    summary: "New regulations have been implemented to combat illegal fishing and trading of protected marine species in Singapore and surrounding waters.",
-    link: "https://www.nea.gov.sg/",
+    title: "Revolutionary Fish-Inspired Robots Could Help Monitor Ocean Health",
+    date: "June 8, 2023",
+    summary: "Engineers have developed autonomous underwater robots that mimic the movement and appearance of fish, allowing scientists to gather data about marine ecosystems with minimal disruption.",
+    link: "https://www.sciencedaily.com/",
   },
 ];
 
@@ -78,6 +78,14 @@ const Home = () => {
     setSearchTerm(suggestion);
     navigate(`/fish-list?search=${encodeURIComponent(suggestion)}`);
   };
+
+  const handleAskAI = () => {
+    if (searchTerm.trim()) {
+      navigate(`/fish-chat?question=${encodeURIComponent(searchTerm)}`);
+    } else {
+      navigate('/fish-chat');
+    }
+  };
   
   return (
     <div className="min-h-screen bg-background">
@@ -112,8 +120,15 @@ const Home = () => {
                 onSelectSuggestion={handleSelectSuggestion}
               />
               
-              <div className="pt-2">
-                <Button type="submit" className="w-full">Search Fish Database</Button>
+              <div className="pt-2 flex space-x-2">
+                <Button type="submit" className="flex-1">
+                  <Search className="mr-2 h-4 w-4" />
+                  Search Database
+                </Button>
+                <Button type="button" variant="secondary" onClick={handleAskAI} className="flex-1">
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  Ask AI Expert
+                </Button>
               </div>
             </form>
           </div>
@@ -121,10 +136,13 @@ const Home = () => {
         
         {/* Quick Actions */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
+          <h2 className="text-2xl font-semibold mb-4 flex items-center">
+            <Zap className="mr-2 h-5 w-5 text-primary" />
+            Quick Actions
+          </h2>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <Link to="/camera" className="no-underline">
-              <Card className="h-full hover:shadow-md transition-shadow">
+              <Card className="h-full hover:shadow-md transition-shadow border-l-4 border-l-primary">
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center text-base">
                     <Camera className="mr-2 h-5 w-5 text-primary" />
@@ -132,40 +150,56 @@ const Home = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>
-                    Take a photo to identify fish species instantly
+                  <CardDescription className="text-sm">
+                    Take a photo to identify fish species instantly using AI
                   </CardDescription>
                 </CardContent>
               </Card>
             </Link>
             
             <Link to="/fish-list" className="no-underline">
-              <Card className="h-full hover:shadow-md transition-shadow">
+              <Card className="h-full hover:shadow-md transition-shadow border-l-4 border-l-secondary">
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center text-base">
-                    <Fish className="mr-2 h-5 w-5 text-primary" />
+                    <Fish className="mr-2 h-5 w-5 text-secondary" />
                     Fish Database
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>
-                    Browse our comprehensive catalog of fish species
+                  <CardDescription className="text-sm">
+                    Browse our comprehensive catalog of fish species and habitats
                   </CardDescription>
                 </CardContent>
               </Card>
             </Link>
 
             <Link to="/fish-chat" className="no-underline">
-              <Card className="h-full hover:shadow-md transition-shadow">
+              <Card className="h-full hover:shadow-md transition-shadow border-l-4 border-l-blue-500">
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center text-base">
-                    <MessageCircle className="mr-2 h-5 w-5 text-primary" />
+                    <MessageCircle className="mr-2 h-5 w-5 text-blue-500" />
                     Fish Expert
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>
-                    Chat with our AI fish expert about anything fishy
+                  <CardDescription className="text-sm">
+                    Chat with our AI fish expert about any aquatic questions
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/settings" className="no-underline">
+              <Card className="h-full hover:shadow-md transition-shadow border-l-4 border-l-amber-500">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center text-base">
+                    <Anchor className="mr-2 h-5 w-5 text-amber-500" />
+                    Conservation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-sm">
+                    Learn about marine conservation and threatened species
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -175,11 +209,14 @@ const Home = () => {
         
         {/* Fish News Section */}
         <section>
-          <h2 className="text-2xl font-semibold mb-4">Recent Fish News</h2>
+          <h2 className="text-2xl font-semibold mb-4 flex items-center">
+            <Award className="mr-2 h-5 w-5 text-primary" />
+            Latest Fish News
+          </h2>
           <div className="space-y-4">
             {fishNews.map(news => (
-              <Card key={news.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
+              <Card key={news.id} className="hover:shadow-md transition-shadow overflow-hidden">
+                <CardHeader className="pb-2 border-b">
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-lg">{news.title}</CardTitle>
                   </div>
@@ -188,10 +225,10 @@ const Home = () => {
                     {news.date}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-4">
                   <p className="text-sm text-foreground/90">{news.summary}</p>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="bg-muted/20">
                   <a 
                     href={news.link} 
                     target="_blank" 
