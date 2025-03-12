@@ -18,8 +18,10 @@ export default defineConfig(({ mode }) => ({
       },
       plugins: [
         {
-          name: "inject-gpt-engineer-script",
-          transformIndexHtml(html) {
+          // TypeScript expects this to be a plugin configuration that has a specific type
+          // Using a properly typed configuration object
+          name: "inject-gpt-engineer-script" as const,
+          transformIndexHtml(html: string) {
             return html.replace(
               /<head>([\s\S]*?)<\/head>/,
               `<head>$1<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></head>`
