@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Search, Camera, Settings, MessageCircle } from 'lucide-react';
+import { Home, Search, Camera, Settings, MessageCircle, Map } from 'lucide-react';
 
 const TabNavigation = () => {
   const location = useLocation();
@@ -26,6 +26,11 @@ const TabNavigation = () => {
       to: '/camera',
       icon: <Camera className="h-5 w-5" />,
       label: 'Camera',
+    },
+    {
+      to: '/fishing-map',
+      icon: <Map className="h-5 w-5" />,
+      label: 'Map',
     },
     {
       to: '/fish-chat',

@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Fish, Camera, Calendar, ExternalLink, MessageCircle, Anchor, Award, Zap } from 'lucide-react';
+import { Search, Fish, Camera, Calendar, ExternalLink, MessageCircle, Anchor, Award, Zap, Map } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -189,17 +188,17 @@ const Home = () => {
               </Card>
             </Link>
 
-            <Link to="/settings" className="no-underline">
-              <Card className="h-full hover:shadow-md transition-shadow border-l-4 border-l-amber-500">
+            <Link to="/fishing-map" className="no-underline">
+              <Card className="h-full hover:shadow-md transition-shadow border-l-4 border-l-green-500">
                 <CardHeader className="pb-2">
                   <CardTitle className="flex items-center text-base">
-                    <Anchor className="mr-2 h-5 w-5 text-amber-500" />
-                    Conservation
+                    <Map className="mr-2 h-5 w-5 text-green-500" />
+                    Fishing Spots
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-sm">
-                    Learn about marine conservation and threatened species
+                    Discover top fishing locations around Singapore
                   </CardDescription>
                 </CardContent>
               </Card>
