@@ -107,11 +107,28 @@ export const fishData: Fish[] = [
     malayName: 'Ikan Kerapu Cicak, Kerapu Tukul',
     teochewName: 'Gao Her' },
   
-  // Continue with more fish data...
   { id: 26, name: 'Chocolate Hind', scientificName: 'Cephalopholis boenak', description: 'Small grouper with chocolate coloration', imageUrl: 'https://i.imgur.com/CwQQZVC.jpg', habitat: 'Marine', size: '12 cm', status: 'non-protected',
     details: 'The chocolate hind is a species of marine fish in the family Serranidae. It is a small grouper with a distinctive chocolate-brown coloration, found in coral reef habitats in the Indo-Pacific region.',
     chineseName: '石斑魚 (Shí bān yú), 印度石斑 (Yìndù shí bān)',
     malayName: 'Kerapu Tenggarong, Kerapu Belang Perang' },
+  
+  { id: 27, name: 'Brown-Marbled Grouper', scientificName: 'Epinephelus fuscoguttatus', description: 'Large grouper with mottled pattern', imageUrl: 'https://i.imgur.com/p0LPvgj.jpg', habitat: 'Marine', size: '95 cm', status: 'non-protected',
+    details: 'The brown-marbled grouper is a species of marine fish in the family Serranidae. It is a large, slow-growing species found in the Indo-Pacific region, particularly around coral reefs. It is highly prized as a food fish in many Asian countries.',
+    chineseName: '石斑魚 (Shí bān yú), 老虎斑 (Lǎohǔ bān)',
+    malayName: 'Kerapu Hitam, Kerapu Harimau',
+    teochewName: 'Lao Her' },
+  
+  { id: 28, name: 'Giant Grouper', scientificName: 'Epinephelus lanceolatus', description: 'Largest bony fish in coral reefs', imageUrl: 'https://i.imgur.com/VO3mFS1.jpg', habitat: 'Marine', size: 'Up to 270 cm', status: 'non-protected',
+    details: 'The giant grouper is the largest bony fish found in coral reefs and can grow to a length of 270 cm and a weight of 400 kg. It has a broad diet, feeding on a variety of fishes, crustaceans, and even small sharks.',
+    chineseName: '石斑魚 (Shí bān yú), 龙趸 (Lóng dǔn)',
+    malayName: 'Kerapu Kertang, Kertak, Kertang, Kertang Putih, Kertang Kapur',
+    teochewName: 'Lung Tan' },
+  
+  { id: 29, name: 'Greasy Grouper', scientificName: 'Epinephelus tauvina', description: 'Common reef fish', imageUrl: 'https://i.imgur.com/2kJnD5C.jpg', habitat: 'Marine', size: '75 cm', status: 'non-protected',
+    details: 'The greasy grouper is a species of marine fish in the family Serranidae. It is widely distributed throughout the Indo-Pacific region and is a common inhabitant of coral reefs and rocky areas. It is a commercially important food fish in many regions.',
+    chineseName: '石斑魚 (Shí bān yú)',
+    malayName: 'Kerapu Kayu, Kerapu Hitam',
+    teochewName: 'Gao Her' },
   
   { id: 30, name: 'Barramundi / Seabass', scientificName: 'Lates calcarifer', description: 'Popular sport and food fish', imageUrl: 'https://i.imgur.com/4oIbrYR.jpg', habitat: 'Freshwater/Marine', size: '29-60 cm', status: 'non-protected',
     details: 'Barramundi, also known as Asian sea bass, is a species of catadromous fish with an elongated body that is compressed and has a large, slightly oblique mouth. They generally inhabit rivers, estuaries, and coastal waters. They are popular targets for recreational fishing and are valued food fish.',
@@ -119,10 +136,63 @@ export const fishData: Fish[] = [
     malayName: 'Ikan Siakap',
     teochewName: 'Siakap, Kim Bak Lor' },
   
+  { id: 31, name: 'Red Snapper', scientificName: 'Lutjanus campechanus', description: 'Highly valued food fish', imageUrl: 'https://i.imgur.com/CwQQZVC.jpg', habitat: 'Marine', size: '60-100 cm', status: 'non-protected',
+    details: 'The red snapper is a species of snapper native to the western Atlantic Ocean including the Gulf of Mexico. It is commercially important and highly sought-after as a food fish.',
+    chineseName: '红鱲 (Hóng jiān), 红衫 (Hóng shān)',
+    malayName: 'Ikan Merah, Ikan Merah Mata Besar',
+    teochewName: 'Ang Sa' },
+  
+  { id: 32, name: 'John Dory', scientificName: 'Zeus faber', description: 'Distinctive laterally compressed fish', imageUrl: 'https://i.imgur.com/M9zEGXQ.jpg', habitat: 'Marine', size: '30-50 cm', status: 'non-protected',
+    details: 'The John Dory is a marine fish with a distinctive appearance: it has a laterally compressed, oval body with a large, extendable mouth. It is highly valued as a food fish in various cuisines around the world.',
+    chineseName: '金钱鱼 (Jīnqián yú)',
+    malayName: 'Ikan Cermin',
+    teochewName: 'Gim Chi Zi' },
+  
+  { id: 33, name: 'Sea Bream', scientificName: 'Pagrus major', description: 'Common food fish', imageUrl: 'https://i.imgur.com/gORZ7Uf.jpg', habitat: 'Marine', size: '40-60 cm', status: 'non-protected',
+    details: 'The sea bream is a species of porgy native to the northwestern Pacific Ocean. It is an important food fish in Asia, particularly in Japanese, Korean, and Chinese cuisines.',
+    chineseName: '鲷鱼 (Diào yú), 红立鱼 (Hóng lì yú)',
+    malayName: 'Ikan Kerisi',
+    teochewName: 'Ang Her' },
+  
+  { id: 34, name: 'Silver Pomfret', scientificName: 'Pampus argenteus', description: 'Highly valued table fish', imageUrl: 'https://i.imgur.com/p0LPvgj.jpg', habitat: 'Marine', size: '25-35 cm', status: 'non-protected',
+    details: 'The silver pomfret is a species of butterfish that lives in coastal waters and estuaries throughout the Indo-Pacific region. It is a popular food fish in many Asian countries, particularly in Chinese, Indian, and Persian Gulf cuisines.',
+    chineseName: '鲳鱼 (Chāng yú), 白鲳 (Bái chāng)',
+    malayName: 'Ikan Bawal Putih, Bawal Tambak',
+    teochewName: 'Pek Chior' },
+  
+  { id: 35, name: 'Threadfin Bream', scientificName: 'Nemipterus spp.', description: 'Common food fish', imageUrl: 'https://i.imgur.com/VO3mFS1.jpg', habitat: 'Marine', size: '15-30 cm', status: 'non-protected',
+    details: 'Threadfin breams are a group of fishes in the family Nemipteridae. They are commonly found in the coastal waters of the Indo-Pacific region and are important food fishes in many Asian countries.',
+    chineseName: '长尾鱼 (Cháng wěi yú)',
+    malayName: 'Ikan Kerisi',
+    teochewName: 'Ri Her' },
+  
   { id: 36, name: 'Blacktip Reef Shark', scientificName: 'Carcharinus melanopterus', description: 'Reef-associated shark', imageUrl: 'https://i.imgur.com/4oIbrYR.jpg', habitat: 'Marine', size: '96 cm', status: 'non-protected',
     details: 'The blacktip reef shark is a species of requiem shark, in the family Carcharhinidae. One of the most common sharks found in shallow tropical and subtropical waters around coral reefs of the Indian and Pacific Oceans. Adult males grow to 1.6 m (5.2 ft) long, while females reach 1.8 m (5.9 ft).',
     chineseName: '鲨鱼 (Shāyú)',
-    malayName: 'Kalitan, Yu Kepak Hitam' }
+    malayName: 'Kalitan, Yu Kepak Hitam' },
+    
+  { id: 37, name: 'Golden Pomfret', scientificName: 'Trachinotus blochii', description: 'Highly valued food fish', imageUrl: 'https://i.imgur.com/2kJnD5C.jpg', habitat: 'Marine', size: '30-60 cm', status: 'non-protected',
+    details: 'The golden pomfret, also known as the snubnose pompano, is a species of pompano in the family Carangidae. It is highly valued as a food fish throughout its range in the Indo-Pacific region.',
+    chineseName: '金鲳 (Jīn chāng)',
+    malayName: 'Ikan Bawal Mas, Bawal Emas',
+    teochewName: 'Kim Chior' },
   
-  // Add more fish data as needed
+  { id: 38, name: 'Yellowfin Tuna', scientificName: 'Thunnus albacares', description: 'Important commercial fish', imageUrl: 'https://i.imgur.com/CwQQZVC.jpg', habitat: 'Marine', size: '150-200 cm', status: 'non-protected',
+    details: 'The yellowfin tuna is a species of tuna found in pelagic waters of tropical and subtropical oceans worldwide. It is widely used in raw fish dishes, especially sashimi, in Japanese cuisine, and has become increasingly popular in Western countries.',
+    chineseName: '黄鳍金枪鱼 (Huáng qí jīn qiāng yú)',
+    malayName: 'Ikan Tuna Sirip Kuning',
+    teochewName: 'Ng Ji Tan' },
+  
+  { id: 39, name: 'Milkfish', scientificName: 'Chanos chanos', description: 'Important food fish in Southeast Asia', imageUrl: 'https://i.imgur.com/M9zEGXQ.jpg', habitat: 'Marine/Brackish', size: '70-100 cm', status: 'non-protected',
+    details: 'The milkfish is the sole living species in the family Chanidae. It is an important food fish in Southeast Asia and is the national fish of the Philippines. It is commonly farmed in fish ponds in Indonesia, Philippines, and Taiwan.',
+    chineseName: '虱目魚 (Shī mù yú)',
+    malayName: 'Ikan Bandeng',
+    teochewName: 'Sar Bak Hu' },
+  
+  { id: 40, name: 'Tilapia', scientificName: 'Oreochromis niloticus', description: 'Important farmed food fish', imageUrl: 'https://i.imgur.com/gORZ7Uf.jpg', habitat: 'Freshwater', size: '20-40 cm', status: 'non-protected',
+    details: 'Tilapia is the common name for nearly a hundred species of cichlid fish from the coelotilapine, coptodonine, heterotilapine, oreochromine, pelmatolapiine, and tilapiine tribes. Tilapia are mainly freshwater fish, inhabiting shallow streams, ponds, rivers, and lakes, and are among the most widely farmed fish worldwide.',
+    chineseName: '罗非鱼 (Luó fēi yú)',
+    malayName: 'Ikan Tilapia',
+    teochewName: 'Luor Hui Hi' }
 ];
+
