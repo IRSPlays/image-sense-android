@@ -18,9 +18,7 @@ export default defineConfig(({ mode }) => ({
       },
       plugins: [
         {
-          // TypeScript expects this to be a plugin configuration that has a specific type
-          // Using a properly typed configuration object
-          name: "inject-gpt-engineer-script" as const,
+          name: "inject-gpt-engineer-script",
           transformIndexHtml(html: string) {
             return html.replace(
               /<head>([\s\S]*?)<\/head>/,
