@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import TabNavigation from "./components/TabNavigation";
 import { ThemeProvider } from "./components/ThemeProvider";
+import FishChat from "./pages/FishChat";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path="/fish/:id" element={<FishDetail />} />
                   <Route path="/camera" element={<CameraPage />} />
                   <Route path="/settings" element={<Settings />} />
+                  <Route path="/fish-chat" element={<FishChat />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <TabNavigation />

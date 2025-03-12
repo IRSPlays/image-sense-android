@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Fish, Camera, Calendar, ExternalLink } from 'lucide-react';
+import { Search, Fish, Camera, Calendar, ExternalLink, MessageCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -122,7 +122,7 @@ const Home = () => {
         {/* Quick Actions */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <Link to="/camera" className="no-underline">
               <Card className="h-full hover:shadow-md transition-shadow">
                 <CardHeader className="pb-2">
@@ -150,6 +150,22 @@ const Home = () => {
                 <CardContent>
                   <CardDescription>
                     Browse our comprehensive catalog of fish species
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link to="/fish-chat" className="no-underline">
+              <Card className="h-full hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center text-base">
+                    <MessageCircle className="mr-2 h-5 w-5 text-primary" />
+                    Fish Expert
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Chat with our AI fish expert about anything fishy
                   </CardDescription>
                 </CardContent>
               </Card>
