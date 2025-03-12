@@ -1,16 +1,44 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Fish, ArrowLeft } from 'lucide-react';
+import { Fish, ArrowLeft, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 import { fishData } from '@/data/fishData';
+import { Input } from '@/components/ui/input';
+import { chatWithFishExpert } from '@/services/geminiService';
+import { useToast } from '@/hooks/use-toast';
 
 const FishDetail = () => {
   const { id } = useParams<{ id: string }>();
   const fishId = parseInt(id || '0');
-  
   const fish = fishData.find(f => f.id === fishId);
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  
+  const handleAskQuestion = async () => {
+    if (!question.trim()) return;
+    
+    try {
+      setIsLoading(true);
+      // Enhance the question with context about the specific fish
+      const enhancedQuestion = `About the ${fish?.name} (${fish?.scientificName}): ${question}`;
+      const response = await chatWithFishExpert(enhancedQuestion);
+      setAnswer(response);
+      setQuestion('');
+    } catch (error) {
+      console.error('Error asking question:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get an answer. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   if (!fish) {
     return (
@@ -28,7 +56,7 @@ const FishDetail = () => {
   }
   
   return (
-    <div className="min-h-screen bg-background pb-16">
+    <div className="min-h-screen bg-background pb-36">
       <header className="py-6 px-4 border-b sticky top-0 bg-background z-10">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -101,9 +129,34 @@ const FishDetail = () => {
                 {fish.status === 'protected' ? 'Protected Species - Fishing Prohibited' : 'Non-Protected Species'}
               </p>
             </div>
+            
+            {answer && (
+              <div className="bg-primary/10 rounded-md p-4 border border-primary/20 mt-6">
+                <h3 className="font-medium mb-2 text-primary">Fish Expert Says:</h3>
+                <p className="leading-relaxed">{answer}</p>
+              </div>
+            )}
           </div>
         </div>
       </main>
+      
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t z-20">
+        <div className="container mx-auto max-w-2xl flex space-x-2">
+          <Input
+            placeholder="Ask a question about this fish..."
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleAskQuestion()}
+            className="flex-1"
+          />
+          <Button 
+            onClick={handleAskQuestion} 
+            disabled={isLoading || !question.trim()}
+          >
+            {isLoading ? "Loading..." : <Send className="h-4 w-4" />}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
