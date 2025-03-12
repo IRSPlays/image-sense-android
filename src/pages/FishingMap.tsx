@@ -71,11 +71,8 @@ const fishingSpots: FishingSpot[] = [
 
 const FishingMap = () => {
   const [selectedSpot, setSelectedSpot] = useState<FishingSpot | null>(null);
-
-  const handleOpenGoogleMaps = () => {
-    window.open("https://www.google.com/maps/d/u/0/viewer?mid=1TVkg5bzrsLrYzrVZqDumb7WqxtFnSeIA&femb=1&ll=1.3778971246014184%2C103.85276993649525&z=12", "_blank");
-  };
-
+  const googleMapsUrl = "https://www.google.com/maps/d/embed?mid=1TVkg5bzrsLrYzrVZqDumb7WqxtFnSeIA&femb=1&ehbc=2E312F";
+  
   const handleOpenSpotInMaps = (spot: FishingSpot) => {
     window.open(`https://www.google.com/maps/search/?api=1&query=${spot.coordinates.lat},${spot.coordinates.lng}`, "_blank");
   };
@@ -90,28 +87,25 @@ const FishingMap = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div className="mb-6">
-          <div className="relative h-64 lg:h-80 rounded-lg border overflow-hidden mb-4 bg-muted/30">
-            <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
-              <div className="text-center p-4">
-                <Map className="h-12 w-12 mx-auto mb-2 text-primary" />
-                <h3 className="text-lg font-semibold mb-2">Singapore Fishing Map</h3>
-                <p className="text-sm text-muted-foreground mb-4">Interactive map of fishing locations in Singapore</p>
-                <Button onClick={handleOpenGoogleMaps} className="gap-2">
-                  <Navigation className="h-4 w-4" />
-                  Open Full Map
-                </Button>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="relative h-[60vh] rounded-lg border overflow-hidden mb-4">
+              <iframe 
+                src={googleMapsUrl}
+                className="absolute inset-0 w-full h-full"
+                title="Singapore Fishing Spots"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
-
-          <h2 className="text-xl font-semibold mb-4">Top Fishing Spots</h2>
           
-          <div className="space-y-4">
+          <div className="space-y-4 lg:col-span-1">
+            <h2 className="text-xl font-semibold mb-4">Top Fishing Spots</h2>
+            
             {fishingSpots.map((spot) => (
               <Card 
                 key={spot.id} 
-                className="hover:shadow-md transition-shadow"
+                className={`hover:shadow-md transition-shadow ${selectedSpot?.id === spot.id ? 'border-primary border-2' : ''}`}
                 onClick={() => setSelectedSpot(spot)}
               >
                 <CardContent className="p-4">
