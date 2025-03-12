@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -10,7 +11,23 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react(),
+    react({
+      jsxImportSource: "@emotion/react",
+      babel: {
+        plugins: ["@emotion/babel-plugin"],
+      },
+      plugins: [
+        {
+          name: "inject-gpt-engineer-script",
+          transformIndexHtml(html) {
+            return html.replace(
+              /<head>([\s\S]*?)<\/head>/,
+              `<head>$1<script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script></head>`
+            );
+          },
+        },
+      ],
+    }),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
