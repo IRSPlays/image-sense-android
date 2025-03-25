@@ -8,6 +8,8 @@ import { fishData } from '@/data/fishData';
 import { Input } from '@/components/ui/input';
 import { chatWithFishExpert } from '@/services/geminiService';
 import { useToast } from '@/hooks/use-toast';
+import { Textarea } from '@/components/ui/textarea';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const FishDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +18,8 @@ const FishDetail = () => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState<{question: string; answer: string}[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   
   const handleAskQuestion = async () => {
@@ -26,6 +30,9 @@ const FishDetail = () => {
       // Enhance the question with context about the specific fish
       const enhancedQuestion = `About the ${fish?.name} (${fish?.scientificName}): ${question}`;
       const response = await chatWithFishExpert(enhancedQuestion);
+      
+      // Add to chat history
+      setChatHistory(prev => [...prev, {question: question, answer: response}]);
       setAnswer(response);
       setQuestion('');
     } catch (error) {
@@ -43,6 +50,7 @@ const FishDetail = () => {
   // Reset answer when fish changes
   useEffect(() => {
     setAnswer('');
+    setChatHistory([]);
   }, [fishId]);
   
   if (!fish) {
@@ -128,14 +136,57 @@ const FishDetail = () => {
               </div>
             )}
             
-            <div className="bg-background rounded-md p-4 border border-border">
+            <div className="bg-background rounded-md p-4 border border-border mb-6">
               <h3 className="font-medium mb-2">Conservation Status</h3>
               <p className={fish.status === 'protected' ? 'text-destructive' : 'text-green-600'}>
                 {fish.status === 'protected' ? 'Protected Species - Fishing Prohibited' : 'Non-Protected Species'}
               </p>
             </div>
             
-            {answer && (
+            {/* Fish AI Chat Section */}
+            <div className="bg-background rounded-md p-4 border border-border mb-6">
+              <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-medium">Fish AI Expert Chat</h3>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      {isOpen ? 'Hide Chat History' : 'Show Chat History'}
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
+                
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Ask our AI fish expert about this {fish.name}, fishing techniques, cooking methods, or any other questions.
+                  </p>
+                </div>
+                
+                <CollapsibleContent>
+                  {chatHistory.length > 0 ? (
+                    <div className="mt-4 space-y-4 max-h-96 overflow-y-auto pr-2">
+                      {chatHistory.map((chat, index) => (
+                        <div key={index} className="space-y-2">
+                          <div className="bg-muted p-3 rounded-md">
+                            <p className="text-sm font-medium">You asked:</p>
+                            <p className="text-sm">{chat.question}</p>
+                          </div>
+                          <div className="bg-primary/10 p-3 rounded-md border border-primary/20">
+                            <p className="text-sm font-medium text-primary">Fish Expert:</p>
+                            <p className="text-sm whitespace-pre-line">{chat.answer}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      No chat history yet. Ask a question below to get started!
+                    </p>
+                  )}
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+            
+            {answer && !isOpen && (
               <div className="bg-primary/10 rounded-md p-4 border border-primary/20 mt-6">
                 <h3 className="font-medium mb-2 text-primary">Fish Expert Says:</h3>
                 <p className="leading-relaxed">{answer}</p>
@@ -147,16 +198,17 @@ const FishDetail = () => {
       
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t z-20">
         <div className="container mx-auto max-w-2xl flex space-x-2">
-          <Input
-            placeholder="Ask a question about this fish..."
+          <Textarea
+            placeholder={`Ask about ${fish.name}...`}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleAskQuestion()}
-            className="flex-1"
+            onKeyDown={(e) => e.key === 'Enter' && e.ctrlKey && !isLoading && handleAskQuestion()}
+            className="flex-1 min-h-[60px] max-h-36 resize-y"
           />
           <Button 
             onClick={handleAskQuestion} 
             disabled={isLoading || !question.trim()}
+            className="self-end h-10"
           >
             {isLoading ? "Loading..." : <Send className="h-4 w-4" />}
           </Button>
