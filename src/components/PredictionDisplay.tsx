@@ -3,6 +3,7 @@ import React from 'react';
 import { Prediction } from '@/services/modelService';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface PredictionDisplayProps {
   predictions: Prediction[];
@@ -22,7 +23,14 @@ const PredictionDisplay: React.FC<PredictionDisplayProps> = ({
 
   return (
     <div className="w-full max-w-md mx-auto mt-6 p-4 bg-card rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4 text-center">Results</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-center">Results</h2>
+        {predictions.length > 0 && predictions[0].probability > 0.7 && (
+          <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500">
+            High Confidence
+          </Badge>
+        )}
+      </div>
       
       {isLoading ? (
         <div className="space-y-4">

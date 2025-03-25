@@ -78,7 +78,15 @@ const CameraPage = () => {
     }
     
     if (fishId) {
-      navigate(`/fish/${fishId}`);
+      toast({
+        title: "Fish Identified",
+        description: `Identified as ${topPrediction.className} with ${(topPrediction.probability * 100).toFixed(1)}% confidence`,
+        variant: "default"
+      });
+      
+      setTimeout(() => {
+        navigate(`/fish/${fishId}`);
+      }, 1000);
     } else {
       toast({
         title: "Fish not found",
