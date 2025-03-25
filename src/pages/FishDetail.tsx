@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Fish, ArrowLeft, Send } from 'lucide-react';
@@ -24,19 +23,19 @@ const FishDetail = () => {
   const { toast } = useToast();
   const isMobile = useIsMobile();
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   
   const handleAskQuestion = async () => {
     if (!question.trim()) return;
     
     try {
       setIsLoading(true);
-      const enhancedQuestion = `About the ${fish?.name} (${fish?.scientificName}): ${question}`;
+      const enhancedQuestion = `About the ${fish?.name} (${fish?.scientificName}): ${question}. Keep your answer brief, concise, and to the point. Use markdown formatting with ** for important terms.`;
       const response = await chatWithFishExpert(enhancedQuestion);
       
       setChatHistory(prev => [...prev, {question: question, answer: response}]);
       setAnswer(response);
       setQuestion('');
-      setIsInputFocused(false);
     } catch (error) {
       console.error('Error asking question:', error);
       toast({
@@ -54,11 +53,9 @@ const FishDetail = () => {
     setChatHistory([]);
   }, [fishId]);
 
-  // Add event listeners to handle keyboard visibility on mobile
   useEffect(() => {
     const handleFocus = () => {
       setIsInputFocused(true);
-      // Scroll to the input area after a short delay to ensure the virtual keyboard is open
       setTimeout(() => {
         inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 300);
@@ -81,6 +78,16 @@ const FishDetail = () => {
       }
     };
   }, []);
+  
+  const renderFormattedText = (text: string) => {
+    return text.split(/(\*\*[^*]+\*\*)/).map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        const boldText = part.substring(2, part.length - 2);
+        return <strong key={index}>{boldText}</strong>;
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
   
   if (!fish) {
     return (
@@ -113,7 +120,7 @@ const FishDetail = () => {
         </div>
       </header>
       
-      <main className={`container mx-auto py-4 px-4 ${isInputFocused ? 'pb-2' : 'pb-28 md:pb-32'}`}>
+      <main className="container mx-auto py-4 px-4 pb-28 md:pb-32">
         <div className="bg-card rounded-lg overflow-hidden border border-border">
           <div className="relative h-56 md:h-64 lg:h-80 w-full">
             {fish.imageUrl ? (
@@ -191,7 +198,7 @@ const FishDetail = () => {
                 
                 <CollapsibleContent>
                   {chatHistory.length > 0 ? (
-                    <div className="mt-4 space-y-4 max-h-96 overflow-y-auto pr-2">
+                    <div className="mt-4 space-y-4 max-h-96 overflow-y-auto pr-2" ref={chatContainerRef}>
                       {chatHistory.map((chat, index) => (
                         <div key={index} className="space-y-2">
                           <div className="bg-muted p-3 rounded-md">
@@ -200,7 +207,9 @@ const FishDetail = () => {
                           </div>
                           <div className="bg-primary/10 p-3 rounded-md border border-primary/20">
                             <p className="text-sm font-medium text-primary">Fish Expert:</p>
-                            <p className="text-sm whitespace-pre-line">{chat.answer}</p>
+                            <div className="text-sm">
+                              {renderFormattedText(chat.answer)}
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -217,14 +226,16 @@ const FishDetail = () => {
             {answer && !isOpen && (
               <div className="bg-primary/10 rounded-md p-4 border border-primary/20 mt-6">
                 <h3 className="font-medium mb-2 text-primary">Fish Expert Says:</h3>
-                <p className="leading-relaxed">{answer}</p>
+                <div className="leading-relaxed">
+                  {renderFormattedText(answer)}
+                </div>
               </div>
             )}
           </div>
         </div>
       </main>
       
-      <div className={`fixed ${isInputFocused ? 'bottom-0 border-t' : 'bottom-16 md:bottom-0 border-t md:mt-4'} left-0 right-0 p-4 bg-background z-20 shadow-lg transition-all duration-300`}>
+      <div className="fixed bottom-16 md:bottom-0 left-0 right-0 p-4 bg-background border-t z-20 shadow-lg">
         <div className="container mx-auto max-w-2xl">
           <form 
             onSubmit={(e) => {
