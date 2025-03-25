@@ -20,8 +20,9 @@ const CameraPage = () => {
     setPredictions(newPredictions);
   };
 
-  // Fish name to ID mapping for redirection
+  // Fish name to ID mapping for redirection - updated with more species to match recognition model
   const fishNameToId: Record<string, number> = {
+    // Protected species
     "Devil Rays": 2,
     "Giant Guitarfishes": 3,
     "Great White Shark": 4,
@@ -41,10 +42,42 @@ const CameraPage = () => {
     "Black Teatfish": 18,
     "Thresher Sharks": 19,
     "Wedgefishes": 20,
+    
+    // Non-protected species
     "Orange-Spotted Grouper": 21,
     "Leopard Coral Trout": 22,
+    "Spotted Coral Trout": 23,
+    "Malabar Grouper": 24,
+    "Honeycomb Grouper": 25,
+    "Chocolate Hind": 26,
+    "Brown-Marbled Grouper": 27,
+    "Giant Grouper": 28,
+    "Greasy Grouper": 29,
+    "Barramundi": 30,
+    "Red Snapper": 31,
+    "John Dory": 32,
+    "Sea Bream": 33,
+    "Silver Pomfret": 34,
+    "Threadfin Bream": 35,
     "Blacktip Reef Shark": 36,
-    "Barramundi": 30
+    "Golden Pomfret": 37,
+    "Yellowfin Tuna": 38,
+    "Milkfish": 39,
+    "Tilapia": 40,
+    
+    // Common names that might be in the model but different from our DB naming
+    "Shark": 4, // Map to Great White Shark
+    "Grouper": 21, // Map to Orange-Spotted Grouper
+    "Tuna": 38, // Map to Yellowfin Tuna
+    "Mako Shark": 9, // Map to Shortfin Mako Shark
+    "Hammerhead": 5, // Map to Great Hammerhead Shark
+    "Coral Trout": 22, // Map to Leopard Coral Trout
+    "Snapper": 31, // Map to Red Snapper
+    "Pomfret": 34, // Map to Silver Pomfret
+    "Rays": 2, // Map to Devil Rays
+    "Seahorse": 15, // Singular form
+    "Guitarfish": 3, // Singular form
+    "Sea Bass": 30 // Alternative name for Barramundi
   };
 
   const identifyFish = () => {

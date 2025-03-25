@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
@@ -24,12 +23,12 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   const animationRef = useRef<number>();
   const navigate = useNavigate();
   
-  // Fish name to ID mapping for redirection
   const fishNameToId: Record<string, number> = {
     "Devil Rays": 2,
     "Giant Guitarfishes": 3,
     "Great White Shark": 4,
     "Great Hammerhead Shark": 5,
+    "Whale Shark": 6,
     "Smooth Hammerhead Shark": 7,
     "Scalloped Hammerhead Shark": 8,
     "Shortfin Mako Shark": 9,
@@ -44,11 +43,40 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
     "Black Teatfish": 18,
     "Thresher Sharks": 19,
     "Wedgefishes": 20,
-    "Whale Shark": 6,
+    
     "Orange-Spotted Grouper": 21,
     "Leopard Coral Trout": 22,
+    "Spotted Coral Trout": 23,
+    "Malabar Grouper": 24,
+    "Honeycomb Grouper": 25,
+    "Chocolate Hind": 26,
+    "Brown-Marbled Grouper": 27,
+    "Giant Grouper": 28,
+    "Greasy Grouper": 29,
+    "Barramundi": 30,
+    "Red Snapper": 31,
+    "John Dory": 32,
+    "Sea Bream": 33,
+    "Silver Pomfret": 34,
+    "Threadfin Bream": 35,
     "Blacktip Reef Shark": 36,
-    "Barramundi": 30
+    "Golden Pomfret": 37,
+    "Yellowfin Tuna": 38,
+    "Milkfish": 39,
+    "Tilapia": 40,
+    
+    "Shark": 4,
+    "Grouper": 21,
+    "Tuna": 38,
+    "Mako Shark": 9,
+    "Hammerhead": 5,
+    "Coral Trout": 22,
+    "Snapper": 31,
+    "Pomfret": 34,
+    "Rays": 2,
+    "Seahorse": 15,
+    "Guitarfish": 3,
+    "Sea Bass": 30
   };
   
   useEffect(() => {
@@ -189,28 +217,24 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         const predictions = await predictImage(canvas);
         onPredictionsUpdate(predictions);
         
-        // If we have predictions, and the top one has reasonable confidence, navigate to the fish detail page
         if (predictions.length > 0 && predictions[0].probability > 0.7) {
           const topPrediction = predictions[0];
           const fishId = fishNameToId[topPrediction.className];
           
           if (fishId) {
-            // Cancel any pending animation frames before navigating
             if (animationRef.current) {
               cancelAnimationFrame(animationRef.current);
             }
             
-            // Stop camera stream before navigating
             if (streamRef.current) {
               streamRef.current.getTracks().forEach(track => track.stop());
             }
             
-            // Navigate to the fish detail page after a short delay
             setTimeout(() => {
               navigate(`/fish/${fishId}`);
             }, 1000);
             
-            return; // Don't request next animation frame
+            return;
           }
         }
       }

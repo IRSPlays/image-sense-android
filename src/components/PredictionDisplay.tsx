@@ -21,6 +21,27 @@ const PredictionDisplay: React.FC<PredictionDisplayProps> = ({
     return 'bg-red-500';
   };
 
+  // Check if a prediction corresponds to a fish in our database
+  const getRecognitionStatus = (className: string): string => {
+    const knownSpecies = [
+      "Devil Rays", "Giant Guitarfishes", "Great White Shark", "Great Hammerhead Shark", "Whale Shark", 
+      "Smooth Hammerhead Shark", "Scalloped Hammerhead Shark", "Shortfin Mako Shark", "Longfin Mako Shark", 
+      "Manta Rays", "Oceanic White-tip Shark", "Porbeagle Shark", "Sawfish", "Seahorses", "Silky Shark", 
+      "White Teatfish", "Black Teatfish", "Thresher Sharks", "Wedgefishes", "Orange-Spotted Grouper", 
+      "Leopard Coral Trout", "Spotted Coral Trout", "Malabar Grouper", "Honeycomb Grouper", "Chocolate Hind", 
+      "Brown-Marbled Grouper", "Giant Grouper", "Greasy Grouper", "Barramundi", "Red Snapper", "John Dory", 
+      "Sea Bream", "Silver Pomfret", "Threadfin Bream", "Blacktip Reef Shark", "Golden Pomfret", 
+      "Yellowfin Tuna", "Milkfish", "Tilapia", "Shark", "Grouper", "Tuna", "Mako Shark", "Hammerhead", 
+      "Coral Trout", "Snapper", "Pomfret", "Rays", "Seahorse", "Guitarfish", "Sea Bass"
+    ];
+    
+    return knownSpecies.some(species => 
+      species.toLowerCase() === className.toLowerCase() || 
+      className.toLowerCase().includes(species.toLowerCase()) || 
+      species.toLowerCase().includes(className.toLowerCase())
+    ) ? "In Database" : "Not in Database";
+  };
+
   return (
     <div className="w-full max-w-md mx-auto mt-6 p-4 bg-card rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
@@ -50,7 +71,14 @@ const PredictionDisplay: React.FC<PredictionDisplayProps> = ({
           {predictions.map((prediction, index) => (
             <div key={index} className="space-y-1">
               <div className="flex justify-between items-center">
-                <span className="font-medium">{prediction.className}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{prediction.className}</span>
+                  {getRecognitionStatus(prediction.className) === "In Database" && (
+                    <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-600 border-blue-500">
+                      In Library
+                    </Badge>
+                  )}
+                </div>
                 <span className="text-sm font-semibold">
                   {(prediction.probability * 100).toFixed(1)}%
                 </span>
