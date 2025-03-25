@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Fish, ArrowLeft, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -19,8 +20,10 @@ const FishDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<{question: string; answer: string}[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   
   const handleAskQuestion = async () => {
     if (!question.trim()) return;
@@ -33,6 +36,7 @@ const FishDetail = () => {
       setChatHistory(prev => [...prev, {question: question, answer: response}]);
       setAnswer(response);
       setQuestion('');
+      setIsInputFocused(false);
     } catch (error) {
       console.error('Error asking question:', error);
       toast({
@@ -49,6 +53,34 @@ const FishDetail = () => {
     setAnswer('');
     setChatHistory([]);
   }, [fishId]);
+
+  // Add event listeners to handle keyboard visibility on mobile
+  useEffect(() => {
+    const handleFocus = () => {
+      setIsInputFocused(true);
+      // Scroll to the input area after a short delay to ensure the virtual keyboard is open
+      setTimeout(() => {
+        inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    };
+
+    const handleBlur = () => {
+      setIsInputFocused(false);
+    };
+
+    const textarea = inputRef.current;
+    if (textarea) {
+      textarea.addEventListener('focus', handleFocus);
+      textarea.addEventListener('blur', handleBlur);
+    }
+
+    return () => {
+      if (textarea) {
+        textarea.removeEventListener('focus', handleFocus);
+        textarea.removeEventListener('blur', handleBlur);
+      }
+    };
+  }, []);
   
   if (!fish) {
     return (
@@ -81,7 +113,7 @@ const FishDetail = () => {
         </div>
       </header>
       
-      <main className="container mx-auto py-4 px-4 pb-28 md:pb-32">
+      <main className={`container mx-auto py-4 px-4 ${isInputFocused ? 'pb-2' : 'pb-28 md:pb-32'}`}>
         <div className="bg-card rounded-lg overflow-hidden border border-border">
           <div className="relative h-56 md:h-64 lg:h-80 w-full">
             {fish.imageUrl ? (
@@ -192,7 +224,7 @@ const FishDetail = () => {
         </div>
       </main>
       
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t z-20 shadow-lg">
+      <div className={`fixed ${isInputFocused ? 'bottom-0 border-t' : 'bottom-16 md:bottom-0 border-t md:mt-4'} left-0 right-0 p-4 bg-background z-20 shadow-lg transition-all duration-300`}>
         <div className="container mx-auto max-w-2xl">
           <form 
             onSubmit={(e) => {
@@ -202,9 +234,12 @@ const FishDetail = () => {
             className="flex gap-2"
           >
             <Textarea
+              ref={inputRef}
               placeholder={`Ask about ${fish?.name}...`}
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setTimeout(() => setIsInputFocused(false), 100)}
               className="flex-1 min-h-[60px] max-h-24 resize-y"
               rows={isMobile ? 2 : 3}
             />
