@@ -97,7 +97,9 @@ const CameraPage = () => {
       return;
     }
     
-    const topPrediction = predictions[0];
+    // Sort predictions by probability in descending order and select the top prediction
+    const sortedPredictions = [...predictions].sort((a, b) => b.probability - a.probability);
+    const topPrediction = sortedPredictions[0];
     console.log("Top prediction:", topPrediction);
     
     // Normalize the prediction class name (lowercase for comparison)
