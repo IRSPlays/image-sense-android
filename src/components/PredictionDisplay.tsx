@@ -32,13 +32,17 @@ const PredictionDisplay: React.FC<PredictionDisplayProps> = ({
       "Brown-Marbled Grouper", "Giant Grouper", "Greasy Grouper", "Barramundi", "Red Snapper", "John Dory", 
       "Sea Bream", "Silver Pomfret", "Threadfin Bream", "Blacktip Reef Shark", "Golden Pomfret", 
       "Yellowfin Tuna", "Milkfish", "Tilapia", "Shark", "Grouper", "Tuna", "Mako Shark", "Hammerhead", 
-      "Coral Trout", "Snapper", "Pomfret", "Rays", "Seahorse", "Guitarfish", "Sea Bass"
+      "Coral Trout", "Snapper", "Pomfret", "Rays", "Seahorse", "Guitarfish", "Sea Bass", 
+      "Great hammer head Shark", "Great hammerhead shark", "Great hammer head shark", "Great Hammer Head Shark",
+      "Hammer head shark", "Hammerhead shark", "Great white shark"
     ];
     
+    const normalizedClassName = className.toLowerCase().trim();
+    
     return knownSpecies.some(species => 
-      species.toLowerCase() === className.toLowerCase() || 
-      className.toLowerCase().includes(species.toLowerCase()) || 
-      species.toLowerCase().includes(className.toLowerCase())
+      species.toLowerCase() === normalizedClassName || 
+      normalizedClassName.includes(species.toLowerCase()) || 
+      species.toLowerCase().includes(normalizedClassName)
     ) ? "In Database" : "Not in Database";
   };
 

@@ -65,19 +65,26 @@ const CameraPage = () => {
     "Milkfish": 39,
     "Tilapia": 40,
     
-    // Common names that might be in the model but different from our DB naming
-    "Shark": 4, // Map to Great White Shark
-    "Grouper": 21, // Map to Orange-Spotted Grouper
-    "Tuna": 38, // Map to Yellowfin Tuna
-    "Mako Shark": 9, // Map to Shortfin Mako Shark
-    "Hammerhead": 5, // Map to Great Hammerhead Shark
-    "Coral Trout": 22, // Map to Leopard Coral Trout
-    "Snapper": 31, // Map to Red Snapper
-    "Pomfret": 34, // Map to Silver Pomfret
-    "Rays": 2, // Map to Devil Rays
-    "Seahorse": 15, // Singular form
-    "Guitarfish": 3, // Singular form
-    "Sea Bass": 30 // Alternative name for Barramundi
+    // Common names and variations that might be in the model
+    "Shark": 4, 
+    "Grouper": 21, 
+    "Tuna": 38, 
+    "Mako Shark": 9, 
+    "Hammerhead": 5, 
+    "Great hammer head Shark": 5, // Handle specific prediction output format
+    "Coral Trout": 22, 
+    "Snapper": 31, 
+    "Pomfret": 34, 
+    "Rays": 2, 
+    "Seahorse": 15, 
+    "Guitarfish": 3, 
+    "Sea Bass": 30,
+    "Great hammerhead shark": 5,
+    "Great hammer head shark": 5,
+    "Great Hammer Head Shark": 5,
+    "Hammer head shark": 5,
+    "Hammerhead shark": 5,
+    "Great white shark": 4
   };
 
   const identifyFish = () => {
@@ -93,20 +100,47 @@ const CameraPage = () => {
     const topPrediction = predictions[0];
     console.log("Top prediction:", topPrediction);
     
+    // Normalize the prediction class name (lowercase for comparison)
+    const normalizedPredictionName = topPrediction.className.toLowerCase().trim();
+    
     // Check exact match first
     let fishId = fishNameToId[topPrediction.className];
     console.log("Found fish ID for exact match:", fishId);
     
-    // If no exact match, try to find a close match
+    // If no exact match, check case-insensitive match
     if (!fishId) {
-      const matchedFish = fishData.find(fish => 
-        topPrediction.className.toLowerCase().includes(fish.name.toLowerCase()) || 
-        fish.name.toLowerCase().includes(topPrediction.className.toLowerCase())
-      );
+      for (const [key, value] of Object.entries(fishNameToId)) {
+        if (key.toLowerCase() === normalizedPredictionName) {
+          fishId = value;
+          console.log("Found fish ID through case-insensitive match:", fishId);
+          break;
+        }
+      }
+    }
+    
+    // If still no match, try to find a close match
+    if (!fishId) {
+      // Try matching by substring
+      for (const [key, value] of Object.entries(fishNameToId)) {
+        if (normalizedPredictionName.includes(key.toLowerCase()) || 
+            key.toLowerCase().includes(normalizedPredictionName)) {
+          fishId = value;
+          console.log("Found fish ID by substring match:", fishId, "for", key);
+          break;
+        }
+      }
       
-      if (matchedFish) {
-        fishId = matchedFish.id;
-        console.log("Found fish ID for close match:", fishId);
+      // If still no match, try matching with fish data directly
+      if (!fishId) {
+        const matchedFish = fishData.find(fish => 
+          normalizedPredictionName.includes(fish.name.toLowerCase()) || 
+          fish.name.toLowerCase().includes(normalizedPredictionName)
+        );
+        
+        if (matchedFish) {
+          fishId = matchedFish.id;
+          console.log("Found fish ID for close match in fish data:", fishId);
+        }
       }
     }
     
