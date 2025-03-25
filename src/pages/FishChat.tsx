@@ -14,6 +14,16 @@ interface ChatMessage {
   isUser: boolean;
 }
 
+// Helper function to render markdown bold text
+const renderMarkdownBold = (text: string) => {
+  if (!text) return '';
+  
+  // Replace markdown bold syntax (**text**) with HTML <strong> tags
+  const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  return formattedText;
+};
+
 const FishChat = () => {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
@@ -132,9 +142,10 @@ const FishChat = () => {
                     </>
                   )}
                 </div>
-                <div className="whitespace-pre-wrap text-base leading-relaxed">
-                  {msg.content}
-                </div>
+                <div 
+                  className="whitespace-pre-wrap text-base leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: msg.isUser ? msg.content : renderMarkdownBold(msg.content) }}
+                />
               </div>
             </div>
           ))}
