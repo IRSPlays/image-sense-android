@@ -8,27 +8,28 @@ import ThemeToggle from '@/components/ThemeToggle';
 import SearchSuggestions from '@/components/SearchSuggestions';
 import { getSearchSuggestions } from '@/services/geminiService';
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const fishNews = [
   {
     id: 1,
-    title: "Scientists Discover New Deep-Sea Fish Species in the Mariana Trench",
-    date: "August 23, 2023",
-    summary: "Marine biologists have identified five previously unknown fish species during a recent expedition to the Mariana Trench, highlighting the vast biodiversity still to be discovered in our oceans.",
+    title: "Rare Giant Sunfish Washes Up on Massachusetts Beach",
+    date: "May 15, 2024",
+    summary: "A rare ocean sunfish, weighing nearly a ton, was discovered on Cape Cod, drawing marine biologists to study this unusual species that typically lives in deep tropical waters.",
     link: "https://www.nationalgeographic.com/",
   },
   {
     id: 2,
-    title: "Global Effort Launched to Protect Endangered Coral Reef Fish",
-    date: "July 14, 2023",
-    summary: "A coalition of 27 countries has committed to new conservation measures aimed at protecting critically endangered coral reef fish species from overfishing and habitat destruction.",
+    title: "New Regulations Aim to Protect Endangered Reef Fish Species",
+    date: "May 12, 2024",
+    summary: "International marine conservation groups have implemented stricter regulations to protect vulnerable reef fish populations facing threats from climate change and overfishing.",
     link: "https://www.conservation.org/",
   },
   {
     id: 3,
-    title: "Revolutionary Fish-Inspired Robots Could Help Monitor Ocean Health",
-    date: "June 8, 2023",
-    summary: "Engineers have developed autonomous underwater robots that mimic the movement and appearance of fish, allowing scientists to gather data about marine ecosystems with minimal disruption.",
+    title: "Breakthrough in Sustainable Aquaculture Could Revolutionize Fish Farming",
+    date: "May 8, 2024",
+    summary: "Scientists have developed a new closed-loop aquaculture system that reduces waste by 90% while increasing fish health and growth rates, potentially transforming the industry.",
     link: "https://www.sciencedaily.com/",
   },
 ];
@@ -39,6 +40,7 @@ const Home = () => {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -124,9 +126,14 @@ const Home = () => {
                   <Search className="mr-2 h-4 w-4" />
                   Search Database
                 </Button>
-                <Button type="button" variant="secondary" onClick={handleAskAI} className="flex-1">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Ask AI Expert
+                <Button 
+                  type="button" 
+                  variant="secondary" 
+                  onClick={handleAskAI} 
+                  className={`flex-1 ${isMobile ? "text-xs px-2" : ""}`}
+                >
+                  <MessageCircle className={`${isMobile ? "mr-1 h-3.5 w-3.5" : "mr-2 h-4 w-4"}`} />
+                  {isMobile ? "Ask AI" : "Ask AI Expert"}
                 </Button>
               </div>
             </form>
