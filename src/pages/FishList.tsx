@@ -9,6 +9,15 @@ import { fishData } from '@/data/fishData';
 import SearchSuggestions from '@/components/SearchSuggestions';
 import { getSearchSuggestions } from '@/services/geminiService';
 import { useToast } from "@/hooks/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
 
 const FishList = () => {
   const [searchParams] = useSearchParams();
@@ -16,6 +25,7 @@ const FishList = () => {
   
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [filterStatus, setFilterStatus] = useState('all'); // 'all', 'protected', 'non-protected'
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const { toast } = useToast();
@@ -108,57 +118,122 @@ const FishList = () => {
           >
             Non-Protected
           </Button>
+
+          <div className="ml-auto flex space-x-1">
+            <Button
+              size="sm"
+              variant={viewMode === 'grid' ? 'default' : 'outline'}
+              onClick={() => setViewMode('grid')}
+              className="text-xs"
+            >
+              Grid
+            </Button>
+            <Button
+              size="sm"
+              variant={viewMode === 'list' ? 'default' : 'outline'}
+              onClick={() => setViewMode('list')}
+              className="text-xs"
+            >
+              List
+            </Button>
+          </div>
         </div>
       </header>
       
       <main className="container mx-auto py-4 px-4">
-        <div className="space-y-4">
-          {filteredFish.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No fish found matching your search.
-            </div>
-          ) : (
-            filteredFish.map(fish => (
+        {filteredFish.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No fish found matching your search.
+          </div>
+        ) : viewMode === 'grid' ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {filteredFish.map(fish => (
               <Link 
                 key={fish.id} 
                 to={`/fish/${fish.id}`}
                 className="block"
               >
-                <div className="flex items-center bg-card rounded-lg p-3 border border-border hover:border-primary transition-all">
-                  <div className="flex-shrink-0 mr-4">
+                <Card className="h-full overflow-hidden hover:border-primary transition-all">
+                  <div className="h-48 relative">
                     {fish.imageUrl ? (
                       <img 
                         src={fish.imageUrl} 
                         alt={fish.name} 
-                        className="w-16 h-16 object-cover rounded-md" 
+                        className="w-full h-full object-cover" 
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-muted rounded-md flex items-center justify-center">
-                        <Fish className="h-8 w-8 text-muted-foreground" />
+                      <div className="w-full h-full bg-muted flex items-center justify-center">
+                        <Fish className="h-12 w-12 text-muted-foreground" />
                       </div>
                     )}
+                    {fish.status === 'protected' && (
+                      <span className="absolute top-2 right-2 text-xs bg-destructive/80 text-destructive-foreground px-2 py-1 rounded-full">
+                        Protected
+                      </span>
+                    )}
                   </div>
-                  
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-semibold">{fish.name}</h3>
-                      {fish.status === 'protected' && (
+                  <CardContent className="p-3">
+                    <h3 className="font-semibold truncate">{fish.name}</h3>
+                    <p className="text-sm text-muted-foreground italic truncate">{fish.scientificName}</p>
+                    <div className="flex mt-1 space-x-4 text-xs text-muted-foreground">
+                      <span>{fish.habitat}</span>
+                      <span>{fish.size}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Image</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Scientific Name</TableHead>
+                  <TableHead>Habitat</TableHead>
+                  <TableHead>Size</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredFish.map(fish => (
+                  <TableRow key={fish.id} className="cursor-pointer hover:bg-muted/80" onClick={() => window.location.href = `/fish/${fish.id}`}>
+                    <TableCell>
+                      {fish.imageUrl ? (
+                        <img 
+                          src={fish.imageUrl} 
+                          alt={fish.name} 
+                          className="w-14 h-14 object-cover rounded-md" 
+                        />
+                      ) : (
+                        <div className="w-14 h-14 bg-muted rounded-md flex items-center justify-center">
+                          <Fish className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell className="font-medium">{fish.name}</TableCell>
+                    <TableCell className="italic">{fish.scientificName}</TableCell>
+                    <TableCell>{fish.habitat}</TableCell>
+                    <TableCell>{fish.size}</TableCell>
+                    <TableCell>
+                      {fish.status === 'protected' ? (
                         <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full">
                           Protected
                         </span>
+                      ) : (
+                        <span className="text-xs bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full">
+                          Non-protected
+                        </span>
                       )}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{fish.scientificName}</p>
-                    <div className="flex mt-1 space-x-4">
-                      <span className="text-xs text-muted-foreground">{fish.habitat}</span>
-                      <span className="text-xs text-muted-foreground">{fish.size}</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))
-          )}
-        </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </main>
     </div>
   );
