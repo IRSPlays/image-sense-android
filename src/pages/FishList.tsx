@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Fish, Search } from 'lucide-react';
+import { Fish, Search, ImageOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -65,6 +64,11 @@ const FishList = () => {
   
   const handleSelectSuggestion = (suggestion: string) => {
     setSearchTerm(suggestion);
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.style.display = 'none';
+    e.currentTarget.nextElementSibling?.classList.remove('hidden');
   };
   
   return (
@@ -155,17 +159,15 @@ const FishList = () => {
               >
                 <Card className="h-full overflow-hidden hover:border-primary transition-all">
                   <div className="h-48 relative">
-                    {fish.imageUrl ? (
-                      <img 
-                        src={fish.imageUrl} 
-                        alt={fish.name} 
-                        className="w-full h-full object-cover" 
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-muted flex items-center justify-center">
-                        <Fish className="h-12 w-12 text-muted-foreground" />
-                      </div>
-                    )}
+                    <img 
+                      src={fish.imageUrl} 
+                      alt={fish.name} 
+                      className="w-full h-full object-cover" 
+                      onError={handleImageError}
+                    />
+                    <div className="hidden w-full h-full bg-muted flex items-center justify-center">
+                      <ImageOff className="h-12 w-12 text-muted-foreground" />
+                    </div>
                     {fish.status === 'protected' && (
                       <span className="absolute top-2 right-2 text-xs bg-destructive/80 text-destructive-foreground px-2 py-1 rounded-full">
                         Protected
@@ -201,17 +203,17 @@ const FishList = () => {
                 {filteredFish.map(fish => (
                   <TableRow key={fish.id} className="cursor-pointer hover:bg-muted/80" onClick={() => window.location.href = `/fish/${fish.id}`}>
                     <TableCell>
-                      {fish.imageUrl ? (
+                      <div className="relative w-14 h-14">
                         <img 
                           src={fish.imageUrl} 
                           alt={fish.name} 
                           className="w-14 h-14 object-cover rounded-md" 
+                          onError={handleImageError}
                         />
-                      ) : (
-                        <div className="w-14 h-14 bg-muted rounded-md flex items-center justify-center">
-                          <Fish className="h-6 w-6 text-muted-foreground" />
+                        <div className="hidden absolute inset-0 bg-muted rounded-md flex items-center justify-center">
+                          <ImageOff className="h-6 w-6 text-muted-foreground" />
                         </div>
-                      )}
+                      </div>
                     </TableCell>
                     <TableCell className="font-medium">{fish.name}</TableCell>
                     <TableCell className="italic">{fish.scientificName}</TableCell>

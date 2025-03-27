@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Fish, ArrowLeft, Send } from 'lucide-react';
+import { Fish, ArrowLeft, Send, ImageOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
 import { fishData } from '@/data/fishData';
@@ -89,6 +89,11 @@ const FishDetail = () => {
     });
   };
   
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.style.display = 'none';
+    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+  };
+  
   if (!fish) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
@@ -123,16 +128,18 @@ const FishDetail = () => {
       <main className="container mx-auto py-4 px-4 pb-28 md:pb-32">
         <div className="bg-card rounded-lg overflow-hidden border border-border">
           <div className="relative h-56 md:h-64 lg:h-80 w-full">
-            {fish.imageUrl ? (
-              <img 
-                src={fish.imageUrl} 
-                alt={fish.name} 
-                className="w-full h-full object-cover" 
-              />
-            ) : (
-              <div className="w-full h-full bg-muted flex items-center justify-center">
-                <Fish className="h-16 w-16 text-muted-foreground" />
-              </div>
+            {fish.imageUrl && (
+              <>
+                <img 
+                  src={fish.imageUrl} 
+                  alt={fish.name} 
+                  className="w-full h-full object-cover" 
+                  onError={handleImageError}
+                />
+                <div className="hidden w-full h-full bg-muted flex items-center justify-center">
+                  <ImageOff className="h-16 w-16 text-muted-foreground" />
+                </div>
+              </>
             )}
             {fish.status === 'protected' && (
               <div className="absolute top-4 right-4 bg-destructive/90 text-destructive-foreground px-3 py-1 rounded-full font-medium">
