@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
@@ -15,7 +16,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   setIsLoading
 }) => {
   const [cameraReady, setCameraReady] = useState(false);
-  const [isFrontCamera, setIsFrontCamera] = useState(false);
+  const [isFrontCamera, setIsFrontCamera] = useState(true); // Set front camera as default
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -87,9 +88,13 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         setModelLoaded(loaded);
         if (loaded) {
           initCamera();
+        } else {
+          console.log("Model failed to load, trying to use Capacitor camera");
+          takePictureWithCapacitor();
         }
       } catch (error) {
         console.error('Error initializing model:', error);
+        takePictureWithCapacitor();
       } finally {
         setIsLoading(false);
       }
@@ -112,11 +117,13 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       setCameraReady(false);
       setIsLoading(true);
       
+      // Clean up any existing stream
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
         streamRef.current = null;
       }
       
+      // Request camera with front camera as default (based on isFrontCamera state)
       const constraints = {
         video: { 
           facingMode: isFrontCamera ? 'user' : 'environment',
@@ -125,16 +132,20 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         }
       };
       
+      console.log(`Attempting to access camera with facingMode: ${isFrontCamera ? 'user' : 'environment'}`);
+      
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         
+        // Set up event listener for when metadata is loaded
         videoRef.current.onloadedmetadata = () => {
           if (videoRef.current) {
             videoRef.current.play()
               .then(() => {
+                console.log("Video playing successfully");
                 setCameraReady(true);
                 startPrediction();
                 setIsLoading(false);
@@ -142,12 +153,14 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
               .catch(error => {
                 console.error('Error playing video:', error);
                 takePictureWithCapacitor();
+                setIsLoading(false);
               });
           }
         };
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
+      // Fall back to Capacitor camera
       takePictureWithCapacitor();
       setIsLoading(false);
     }
@@ -179,6 +192,8 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
           }
         };
         img.src = image.webPath;
+      } else {
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error taking picture with Capacitor:', error);
@@ -188,6 +203,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
 
   const toggleCamera = () => {
     setIsFrontCamera(prev => !prev);
+    console.log(`Switching camera to: ${!isFrontCamera ? 'front' : 'rear'}`);
     setTimeout(() => {
       initCamera();
     }, 300);
