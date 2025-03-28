@@ -19,20 +19,12 @@ export const loadModel = async (): Promise<boolean> => {
   
   try {
     isModelLoading = true;
-    console.log("Attempting to load model from:", MODEL_URL);
     const modelURL = MODEL_URL + 'model.json';
     const metadataURL = MODEL_URL + 'metadata.json';
     
-    // Set a timeout to prevent hanging if the model fetch fails
-    const modelPromise = tmImage.load(modelURL, metadataURL);
-    const timeoutPromise = new Promise<null>((_, reject) => 
-      setTimeout(() => reject(new Error("Model load timeout")), 15000)
-    );
-    
-    model = await Promise.race([modelPromise, timeoutPromise]) as tmImage.CustomMobileNet;
+    model = await tmImage.load(modelURL, metadataURL);
     maxPredictions = model.getTotalClasses();
     isModelLoading = false;
-    console.log("Model loaded successfully with", maxPredictions, "classes");
     return true;
   } catch (error) {
     console.error('Failed to load model:', error);
@@ -47,7 +39,7 @@ export const getMaxPredictions = (): number => {
 
 export const predictImage = async (imageElement: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Promise<Prediction[]> => {
   if (!model) {
-    return []; // Return empty array instead of throwing error
+    throw new Error('Model not loaded');
   }
   
   try {
@@ -55,7 +47,7 @@ export const predictImage = async (imageElement: HTMLImageElement | HTMLVideoEle
     return predictions;
   } catch (error) {
     console.error('Prediction error:', error);
-    return []; // Return empty array on error
+    throw error;
   }
 };
 
