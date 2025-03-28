@@ -1,8 +1,7 @@
-
 import * as tf from '@tensorflow/tfjs';
 import * as tmImage from '@teachablemachine/image';
 
-const MODEL_URL = 'https://teachablemachine.withgoogle.com/models/JnYQB05SL/';
+const MODEL_URL = 'https://teachablemachine.withgoogle.com/models/RIIUrqVaD/';
 
 let model: tmImage.CustomMobileNet | null = null;
 let isModelLoading = false;
