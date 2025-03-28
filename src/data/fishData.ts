@@ -1,4 +1,3 @@
-
 export interface Fish {
   id: number;
   name: string;
@@ -193,5 +192,53 @@ export const fishData: Fish[] = [
     details: 'Tilapia is the common name for nearly a hundred species of cichlid fish from the coelotilapine, coptodonine, heterotilapine, oreochromine, pelmatolapiine, and tilapiine tribes. Tilapia are mainly freshwater fish, inhabiting shallow streams, ponds, rivers, and lakes, and are among the most widely farmed fish worldwide.',
     chineseName: '罗非鱼 (Luó fēi yú)',
     malayName: 'Ikan Tilapia',
-    teochewName: 'Luor Hui Hi' }
+    teochewName: 'Luor Hui Hi' },
+  
+  // New species from Teachable Machine Model
+  { id: 41, name: 'Anemone', scientificName: 'Actiniaria spp.', description: 'Marine invertebrate', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Anemonia_viridis_1.jpg', habitat: 'Marine', size: 'Small to Medium', status: 'non-protected',
+    details: 'Sea anemones are predatory marine invertebrates of the order Actiniaria. They are named after the anemone flower and are closely related to corals and jellyfish. They use their tentacles to catch prey and can form symbiotic relationships with clownfish.' },
+  
+  { id: 42, name: 'Coral', scientificName: 'Anthozoa spp.', description: 'Marine invertebrates', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/61/Coral_%2823504220480%29.jpg', habitat: 'Marine', size: 'Varies widely', status: 'protected',
+    details: 'Corals are marine invertebrates within the class Anthozoa. They typically form colonial organisms and live in compact colonies of many identical individual polyps. Corals are the foundation of many marine ecosystems and are threatened by climate change and ocean acidification.' },
+  
+  { id: 43, name: 'Crab', scientificName: 'Brachyura spp.', description: 'Decapod crustaceans', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Crab_in_the_water_%28cropped%29.jpg', habitat: 'Marine/Freshwater', size: 'Small to Large', status: 'non-protected',
+    details: 'Crabs are decapod crustaceans of the infraorder Brachyura, which typically have a very short "tail" and a thick, calcified carapace. They are found in all of the world\'s oceans, while many crabs live in fresh water and on land, particularly in tropical regions.' },
+  
+  { id: 44, name: 'Jellyfish', scientificName: 'Medusozoa spp.', description: 'Marine invertebrates', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Jelly_cc11.jpg', habitat: 'Marine', size: 'Varies widely', status: 'non-protected',
+    details: 'Jellyfish or jellies are free-swimming marine animals with gelatinous umbrella-shaped bells and trailing tentacles. They use their tentacles to capture prey, and some species can deliver a powerful sting to humans.' },
+  
+  { id: 45, name: 'Nudibranch', scientificName: 'Nudibranchia spp.', description: 'Marine mollusks', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/39/Chromodoris_willani.jpg', habitat: 'Marine', size: 'Small', status: 'non-protected',
+    details: 'Nudibranchs are a group of soft-bodied, marine gastropod mollusks which shed their shells after their larval stage. They are known for their extraordinary colors and striking forms. They are found in oceans worldwide, from the tropics to Antarctica.' },
+  
+  { id: 46, name: 'Octopus', scientificName: 'Octopoda spp.', description: 'Marine mollusks', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Giant_Pacific_Octopus.jpg', habitat: 'Marine', size: 'Small to Large', status: 'non-protected',
+    details: 'Octopuses are soft-bodied, eight-limbed mollusks of the order Octopoda. They are known for their intelligence, their ability to change color and texture, and their unique problem-solving abilities. They can be found in various marine habitats around the world.' },
+  
+  { id: 47, name: 'Pufferfish', scientificName: 'Tetraodontidae spp.', description: 'Marine and freshwater fish', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Arothron_nigropunctatus_by_NPS.jpg', habitat: 'Marine/Freshwater', size: 'Small to Medium', status: 'non-protected',
+    details: 'Pufferfish are fish of the family Tetraodontidae, with about 200 species. They are named for their ability to inflate their bodies by swallowing water or air when threatened. Many species contain tetrodotoxin, a deadly toxin, while some species are considered delicacies in some cultures.',
+    chineseName: '河豚 (Hé tún)',
+    malayName: 'Ikan Buntal' },
+  
+  { id: 48, name: 'Sea Star', scientificName: 'Asteroidea spp.', description: 'Marine echinoderms', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Fromia_monilis_%28Red_starfish%29.jpg/1280px-Fromia_monilis_%28Red_starfish%29.jpg', habitat: 'Marine', size: 'Small to Medium', status: 'non-protected',
+    details: 'Sea stars, or starfish, are star-shaped echinoderms belonging to the class Asteroidea. They typically have five arms that radiate from a central disk, though some species have more. They are found in all the world\'s oceans, from tropical habitats to the cold seafloor.' },
+  
+  { id: 49, name: 'Sea Turtle', scientificName: 'Chelonioidea spp.', description: 'Marine reptiles', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Chelonia_mydas_%28grazing%29.jpg', habitat: 'Marine', size: 'Large', status: 'protected',
+    details: 'Sea turtles are reptiles of the order Testudines. There are seven existing species of sea turtles: the green, loggerhead, Kemp\'s ridley, olive ridley, hawksbill, flatback, and leatherback. All species of sea turtles are listed as threatened or endangered and are protected under various international conservation efforts.' },
+  
+  { id: 50, name: 'Seagrass', scientificName: 'Various genera', description: 'Marine flowering plants', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Thalassia_testudinum_Turtle_Grass_2500px.jpg', habitat: 'Marine', size: 'Varies', status: 'protected',
+    details: 'Seagrasses are flowering plants adapted to living fully submerged in marine environments. They form extensive underwater meadows and are crucial for marine ecosystems, providing habitat, food, and nursery areas for many marine species. They also help stabilize the seafloor and improve water quality.' },
+  
+  { id: 51, name: 'Shrimp', scientificName: 'Caridea spp.', description: 'Decapod crustaceans', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Pandalus_borealis_%28NOAA%29.jpg', habitat: 'Marine/Freshwater', size: 'Small', status: 'non-protected',
+    details: 'Shrimp are swimming crustaceans with elongated bodies and a primarily swimming mode of locomotion. They play important roles in the food chain and are an important food source for larger animals, from fish to whales. Many species are also harvested for human consumption.',
+    chineseName: '虾 (Xiā)',
+    malayName: 'Udang' },
+  
+  { id: 52, name: 'Squid', scientificName: 'Teuthida spp.', description: 'Marine mollusks', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Giant_Squid_Caught_in_Trawl_Net.jpg', habitat: 'Marine', size: 'Small to Very Large', status: 'non-protected',
+    details: 'Squids are cephalopods in the superorder Decapodiformes. Like all cephalopods, squids are distinguished by having a distinct head, bilateral symmetry, and a mantle. They have eight arms arranged in pairs, and two longer tentacles with suckers. Many species are important food sources for human consumption.',
+    chineseName: '鱿鱼 (Yóu yú)',
+    malayName: 'Sotong' },
+  
+  { id: 53, name: 'Stingray', scientificName: 'Myliobatiformes spp.', description: 'Cartilaginous fish', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Stingray3.jpg', habitat: 'Marine', size: 'Medium to Large', status: 'non-protected',
+    details: 'Stingrays are a group of rays, which are cartilaginous fish related to sharks. They are characterized by their flattened bodies, enlarged pectoral fins that are fused to the head, and long, whip-like tails often equipped with barbed stingers. They are generally found in coastal tropical and subtropical marine habitats.',
+    chineseName: '魟鱼 (Hóng yú)',
+    malayName: 'Ikan Pari' }
 ];
