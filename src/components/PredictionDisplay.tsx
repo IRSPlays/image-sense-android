@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Prediction } from '@/services/modelService';
 import { Progress } from '@/components/ui/progress';
@@ -23,18 +22,11 @@ const PredictionDisplay: React.FC<PredictionDisplayProps> = ({
 
   // Check if a prediction corresponds to a fish in our database
   const getRecognitionStatus = (className: string): string => {
+    // Update this list based on the classes in the new model
     const knownSpecies = [
-      "Devil Rays", "Giant Guitarfishes", "Great White Shark", "Great Hammerhead Shark", "Whale Shark", 
-      "Smooth Hammerhead Shark", "Scalloped Hammerhead Shark", "Shortfin Mako Shark", "Longfin Mako Shark", 
-      "Manta Rays", "Oceanic White-tip Shark", "Porbeagle Shark", "Sawfish", "Seahorses", "Silky Shark", 
-      "White Teatfish", "Black Teatfish", "Thresher Sharks", "Wedgefishes", "Orange-Spotted Grouper", 
-      "Leopard Coral Trout", "Spotted Coral Trout", "Malabar Grouper", "Honeycomb Grouper", "Chocolate Hind", 
-      "Brown-Marbled Grouper", "Giant Grouper", "Greasy Grouper", "Barramundi", "Red Snapper", "John Dory", 
-      "Sea Bream", "Silver Pomfret", "Threadfin Bream", "Blacktip Reef Shark", "Golden Pomfret", 
-      "Yellowfin Tuna", "Milkfish", "Tilapia", "Shark", "Grouper", "Tuna", "Mako Shark", "Hammerhead", 
-      "Coral Trout", "Snapper", "Pomfret", "Rays", "Seahorse", "Guitarfish", "Sea Bass", 
-      "Great hammer head Shark", "Great hammerhead shark", "Great hammer head shark", "Great Hammer Head Shark",
-      "Hammer head shark", "Hammerhead shark", "Great white shark"
+      "Anemone", "Coral", "Crab", "Fish", "Jellyfish", "Nudibranch", 
+      "Octopus", "Pufferfish", "Sea Star", "Sea Turtle", "Seagrass", 
+      "Seahorse", "Shark", "Shrimp", "Squid", "Stingray"
     ];
     
     const normalizedClassName = className.toLowerCase().trim();

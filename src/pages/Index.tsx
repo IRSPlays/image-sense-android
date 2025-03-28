@@ -44,7 +44,7 @@ const Index = () => {
           
           <div className="text-center text-sm text-muted-foreground mt-8">
             <p>Powered by Teachable Machine</p>
-            <p className="mt-1">Model: <a href="https://teachablemachine.withgoogle.com/models/Ya0ENDPDw/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Ya0ENDPDw</a></p>
+            <p className="mt-1">Model: <a href="https://teachablemachine.withgoogle.com/models/JnYQB05SL/" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">JnYQB05SL</a></p>
           </div>
         </div>
       </main>
