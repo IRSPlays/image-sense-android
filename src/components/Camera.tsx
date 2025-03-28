@@ -1,9 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 import { loadModel, predictImage, isModelReady, Prediction } from '@/services/modelService';
-import { RefreshCw, Camera as CameraIcon, SwitchCamera } from 'lucide-react';
+import { RefreshCw, SwitchCamera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface CameraComponentProps {
@@ -23,7 +22,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   const [modelLoaded, setModelLoaded] = useState(false);
   const animationRef = useRef<number>();
   const navigate = useNavigate();
-  
+
   const fishNameToId: Record<string, number> = {
     "Devil Rays": 2,
     "Giant Guitarfishes": 3,
@@ -79,7 +78,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
     "Guitarfish": 3,
     "Sea Bass": 30
   };
-  
+
   useEffect(() => {
     const initModel = async () => {
       try {
@@ -107,7 +106,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       }
     };
   }, []);
-  
+
   const initCamera = async () => {
     try {
       setCameraReady(false);
@@ -141,7 +140,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       setIsLoading(false);
     }
   };
-  
+
   const takePictureWithCapacitor = async () => {
     try {
       setIsLoading(true);
@@ -174,14 +173,14 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       setIsLoading(false);
     }
   };
-  
+
   const toggleCamera = () => {
     setIsFrontCamera(!isFrontCamera);
     setTimeout(() => {
       initCamera();
     }, 300);
   };
-  
+
   const captureFrame = () => {
     if (videoRef.current && canvasRef.current && cameraReady) {
       const video = videoRef.current;
@@ -208,7 +207,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
     }
     return null;
   };
-  
+
   const predict = async () => {
     if (!cameraReady || !isModelReady()) return;
     
@@ -245,14 +244,14 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
     
     animationRef.current = requestAnimationFrame(predict);
   };
-  
+
   const startPrediction = () => {
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
     animationRef.current = requestAnimationFrame(predict);
   };
-  
+
   return (
     <div className="relative w-full max-w-md mx-auto">
       <div className="relative overflow-hidden rounded-lg bg-black aspect-video flex items-center justify-center">
