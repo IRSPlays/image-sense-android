@@ -105,7 +105,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, []);
+  }, [setIsLoading]);
 
   const initCamera = async () => {
     try {
@@ -114,6 +114,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
       }
       
       const constraints = {
@@ -129,14 +130,25 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
-        setCameraReady(true);
-        startPrediction();
+        
+        videoRef.current.onloadedmetadata = () => {
+          if (videoRef.current) {
+            videoRef.current.play()
+              .then(() => {
+                setCameraReady(true);
+                startPrediction();
+                setIsLoading(false);
+              })
+              .catch(error => {
+                console.error('Error playing video:', error);
+                takePictureWithCapacitor();
+              });
+          }
+        };
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
       takePictureWithCapacitor();
-    } finally {
       setIsLoading(false);
     }
   };
@@ -175,7 +187,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   };
 
   const toggleCamera = () => {
-    setIsFrontCamera(!isFrontCamera);
+    setIsFrontCamera(prev => !prev);
     setTimeout(() => {
       initCamera();
     }, 300);
@@ -249,7 +261,11 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
-    animationRef.current = requestAnimationFrame(predict);
+    if (cameraReady && videoRef.current && videoRef.current.readyState === 4) {
+      animationRef.current = requestAnimationFrame(predict);
+    } else {
+      setTimeout(startPrediction, 100);
+    }
   };
 
   return (
@@ -266,6 +282,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
               className={`w-full h-full object-cover ${isFrontCamera ? 'scale-x-[-1]' : ''}`}
               playsInline 
               muted
+              autoPlay
             />
             <canvas ref={canvasRef} className="hidden" />
           </>
@@ -286,12 +303,13 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
           size="icon" 
           className="rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white"
           onClick={() => {
-            if (cameraReady) {
+            if (modelLoaded) {
               initCamera();
             } else {
               takePictureWithCapacitor();
             }
           }}
+          title="Restart camera"
         >
           <RefreshCw className="h-5 w-5" />
         </Button>
