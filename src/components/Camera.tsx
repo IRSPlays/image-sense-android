@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 import { loadModel, predictImage, isModelReady, Prediction } from '@/services/modelService';
-import { RefreshCw, Camera as CameraIcon } from 'lucide-react';
+import { RefreshCw, Camera as CameraIcon, SwitchCamera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface CameraComponentProps {
@@ -15,7 +16,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
   setIsLoading
 }) => {
   const [cameraReady, setCameraReady] = useState(false);
-  const [isFrontCamera, setIsFrontCamera] = useState(true);
+  const [isFrontCamera, setIsFrontCamera] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -277,8 +278,9 @@ const CameraComponent: React.FC<CameraComponentProps> = ({
           size="icon" 
           className="rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white"
           onClick={toggleCamera}
+          title={isFrontCamera ? "Switch to rear camera" : "Switch to front camera"}
         >
-          <CameraIcon className="h-5 w-5" />
+          <SwitchCamera className="h-5 w-5" />
         </Button>
         
         <Button 
