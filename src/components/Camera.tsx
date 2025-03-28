@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource, CameraDirection } from '@capacitor/camera';
 import { loadModel, predictImage, isModelReady, Prediction } from '@/services/modelService';
-import { RefreshCw, Camera as CameraIcon, SwitchCamera } from 'lucide-react';
+import { RefreshCw, SwitchCamera } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const CameraComponent: React.FC<{ 
@@ -13,7 +14,7 @@ const CameraComponent: React.FC<{
   setIsLoading
 }) => {
   const [cameraReady, setCameraReady] = useState(false);
-  const [isFrontCamera, setIsFrontCamera] = useState(true);
+  const [isFrontCamera, setIsFrontCamera] = useState(false); // Set default to rear camera
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -213,6 +214,8 @@ const CameraComponent: React.FC<{
       const canvas = captureFrame();
       if (canvas) {
         const predictions = await predictImage(canvas);
+        
+        // Always update predictions in real-time
         onPredictionsUpdate(predictions);
         
         if (predictions.length > 0 && predictions[0].probability > 0.7) {
@@ -240,7 +243,10 @@ const CameraComponent: React.FC<{
       console.error('Error predicting:', error);
     }
     
-    animationRef.current = requestAnimationFrame(predict);
+    // Maintain the prediction loop at a reasonable frame rate (around 10fps)
+    animationRef.current = setTimeout(() => {
+      requestAnimationFrame(predict);
+    }, 100) as unknown as number;
   };
 
   const startPrediction = () => {

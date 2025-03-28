@@ -8,6 +8,9 @@ let model: tmImage.CustomMobileNet | null = null;
 let isModelLoading = false;
 let maxPredictions = 0;
 
+// Enable memory optimizations for continuous predictions
+tf.env().set('WEBGL_DELETE_TEXTURE_THRESHOLD', 0);
+
 export interface Prediction {
   className: string;
   probability: number;
@@ -44,6 +47,12 @@ export const predictImage = async (imageElement: HTMLImageElement | HTMLVideoEle
   
   try {
     const predictions = await model.predict(imageElement);
+    
+    // Clean up memory after each prediction to prevent memory leaks during continuous use
+    if (tf.memory().numTensors > 100) {
+      tf.tidy(() => {});
+    }
+    
     return predictions;
   } catch (error) {
     console.error('Prediction error:', error);
